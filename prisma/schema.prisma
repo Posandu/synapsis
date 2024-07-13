@@ -14,6 +14,30 @@ model User {
   createdAt     DateTime @default(now())
 
   sessions Session[]
+  Note     Note[]
+  Category Category[]
+}
+
+model Category {
+  id     String @id @default(uuid())
+  name   String
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  notes Note[]
+}
+
+model Note {
+  id         String   @id @default(uuid())
+  title      String
+  content    String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  categoryId String
+  userId     String
+
+  category Category @relation(fields: [categoryId], references: [id])
+  user     User     @relation(fields: [userId], references: [id])
 }
 
 model Session {

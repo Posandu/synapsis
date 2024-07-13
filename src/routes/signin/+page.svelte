@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
+	import Logo from '$lib/logo.svg';
 	import { superForm } from 'sveltekit-superforms';
 	import type { PageData } from './$types';
 	import { fade } from 'svelte/transition';
@@ -25,6 +26,8 @@
 <div class="relative flex min-h-svh items-center justify-center">
 	<div class="relative w-full max-w-xs text-center">
 		<div class="flex-1">
+			<img src={Logo} alt="Logo" class="mx-auto mb-8 w-36" />
+
 			<Typography variant="h2" class="mb-4">Sign In</Typography>
 			<Typography variant="subtitle" class="mb-8">
 				Welcome back! Please sign in to your account.

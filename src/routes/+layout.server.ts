@@ -1,5 +1,6 @@
-export const load = async ({ locals: { user } }) => {
+export const load = async ({ locals: { user }, url }) => {
 	return {
-		user
+		user,
+		url: url.pathname
 	};
 };

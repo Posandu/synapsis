@@ -52,3 +52,4 @@ class User {
 }
 
 export { User };
+export type { CreateUserParams };

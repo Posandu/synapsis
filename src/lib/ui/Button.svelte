@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Icon from '@iconify/svelte';
 	import clsx from 'clsx';
 	import type { Snippet } from 'svelte';
 	import { Stretch } from 'svelte-loading-spinners';
@@ -9,12 +10,16 @@
 		link = undefined,
 		class: className = '',
 		variant = undefined,
-		children
+		icon = undefined,
+		children = undefined,
+		onclick = undefined,
+		size = undefined
 	}: {
 		loading?: boolean;
 		disabled?: boolean;
 		link?: string;
 		class?: string;
+		icon?: string;
 		variant?:
 			| 'primary'
 			| 'secondary'
@@ -23,8 +28,11 @@
 			| 'danger'
 			| 'warning'
 			| 'success'
+			| 'ghost'
 			| undefined;
-		children: Snippet;
+		size?: 'sm' | 'md' | 'lg';
+		children?: Snippet;
+		onclick?: () => void;
 	} = $props();
 
 	let dynamicProps = $derived.by(() => {
@@ -32,11 +40,12 @@
 
 		if (disabled) obj.disabled = true;
 		if (link) obj.href = link;
+		if (onclick) obj.onclick = onclick;
 
 		return obj;
 	});
 
-	let classes = $derived<string>(`"
+	let classes = $derived<string>(`
         btn relative overflow-hidden
         
         ${clsx(
@@ -50,14 +59,27 @@
 					variant === 'accent' && 'btn-accent',
 					variant === 'danger' && 'btn-danger',
 					variant === 'warning' && 'btn-warning',
-					variant === 'success' && 'btn-success'
+					variant === 'success' && 'btn-success',
+					variant === 'ghost' && 'btn-ghost',
+
+					icon && 'btn-circle',
+
+					size === 'sm' && 'btn-sm',
+					size === 'md' && 'btn-md',
+					size === 'lg' && 'btn-lg'
 				)}
-    "`);
+
+			
+    `);
 </script>
 
 {#snippet c()}
 	<div class:opacity-0={loading}>
-		{@render children()}
+		{#if icon}
+			<Icon {icon} class="text-2xl" />
+		{:else if children}
+			{@render children()}
+		{/if}
 	</div>
 
 	<div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">

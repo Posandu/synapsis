@@ -27,7 +27,7 @@ export const actions = {
 
 			const session = await lucia.createSession(id, {});
 			const sessionCookie = lucia.createSessionCookie(session.id);
-			
+
 			cookies.set(sessionCookie.name, sessionCookie.value, {
 				path: '.',
 				...sessionCookie.attributes
@@ -35,7 +35,10 @@ export const actions = {
 		} catch (error) {
 			console.error(error);
 
-			return message(form, getErrorIfString(error, 'User creation failed'));
+			return message(form, {
+				text: getErrorIfString(error, 'An unexpected error occurred. Please try again later.'),
+				type: 'error'
+			});
 		}
 
 		throw redirect(302, '/?loggedIn=true');

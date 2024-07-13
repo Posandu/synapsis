@@ -1,22 +1,95 @@
 <script lang="ts">
+	import Icon from '@iconify/svelte';
+	import Logo from '$lib/logo.svg';
 	import { superForm } from 'sveltekit-superforms';
+	import type { PageData } from './$types';
+	import { fade } from 'svelte/transition';
+	import Button from '$lib/ui/Button.svelte';
+	import Input from '$lib/ui/Input.svelte';
+	import Typography from '$lib/ui/Typography.svelte';
+	import Alert from '$lib/ui/Alert.svelte';
 
-	export let data;
+	let {
+		data
+	}: {
+		data: PageData;
+	} = $props();
 
-	// Client API:
-	const { form, message, errors } = superForm(data.form);
+	let passwordShown = $state(false);
+
+	const { form, message, errors, delayed, enhance, constraints } = superForm(data.form, {
+		resetForm: false,
+		delayMs: 0
+	});
 </script>
 
-{#if $message}<h3>{$message}</h3>{/if}
+<div class="relative flex min-h-svh items-center justify-center">
+	<div class="relative w-full max-w-xs text-center">
+		<div class="flex-1">
+			<img src={Logo} alt="Logo" class="mx-auto mb-8 w-36" />
 
-<form method="POST" class="flex flex-col mt-96 max-w-4xl bg-primary p-4 text-primary-content mx-auto">
-	<label for="username">Username</label>
-	<input type="text" name="username" bind:value={$form.username} />
-	{#if $errors.username}<p>{$errors.username}</p>{/if}
+			<Typography variant="h2" class="mb-4">Sign Up</Typography>
+			<Typography variant="subtitle" class="mb-8">Ready to ace your exams?</Typography>
 
-	<label for="password">Password</label>
-	<input type="password" name="password" bind:value={$form.password} />
-	{#if $errors.password}<p>{$errors.password}</p>{/if}
+			{#if $message && $message.type == 'error'}
+				<Alert type="error" class="mb-4 mt-1">{$message.text}</Alert>
+			{/if}
+		</div>
 
-	<button class="btn mt-4">Submit</button>
-</form>
+		<form method="POST" class="flex flex-col gap-4" use:enhance>
+			{#snippet UsernameBefore()}
+				<Icon icon="mdi:account" class="opacity-70" />
+			{/snippet}
+
+			{#snippet PasswordIconBefore()}
+				<Icon icon="mdi:lock" class="opacity-70" />
+			{/snippet}
+
+			{#snippet PasswordIconAfter()}
+				<button
+					class="btn btn-circle btn-ghost btn-xs text-lg opacity-70"
+					type="button"
+					onclick={() => (passwordShown = !passwordShown)}
+				>
+					{#if passwordShown}
+						<span transition:fade={{ duration: 100 }} class="absolute">
+							<Icon icon="mdi:eye" />
+						</span>
+					{:else}
+						<span transition:fade={{ duration: 100 }} class="absolute">
+							<Icon icon="mdi:eye-off" />
+						</span>
+					{/if}
+				</button>
+			{/snippet}
+
+			<Input
+				before={UsernameBefore}
+				bind:value={$form.username}
+				error={$errors.username?.join('')}
+				otherProps={$constraints.username}
+				autocomplete="username"
+				name="username"
+				placeholder="Username"
+			/>
+
+			<Input
+				type={passwordShown ? 'text' : 'password'}
+				before={PasswordIconBefore}
+				after={PasswordIconAfter}
+				bind:value={$form.password}
+				error={$errors.password?.join('')}
+				otherProps={$constraints.password}
+				autocomplete="current-password"
+				name="password"
+				placeholder="Password"
+			/>
+
+			<Button disabled={$delayed} loading={$delayed} variant="primary">Sign Up</Button>
+		</form>
+
+		<Typography variant="subtitle" class="mt-4">Already have an account?</Typography>
+
+		<Button link="/signin" variant="neutral" class="mt-4 flex">Sign In</Button>
+	</div>
+</div>

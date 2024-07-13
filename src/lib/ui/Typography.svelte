@@ -13,13 +13,13 @@
 </script>
 
 {#if variant === 'h1'}
-	<h1 class="text-4xl font-bold {className}">{@render children()}</h1>
+	<h1 class="text-4xl font-bold text-black {className}">{@render children()}</h1>
 {:else if variant === 'h2'}
-	<h2 class="text-3xl font-bold {className}">{@render children()}</h2>
+	<h2 class="text-3xl font-bold text-black {className}">{@render children()}</h2>
 {:else if variant === 'h3'}
-	<h3 class="text-2xl font-bold {className}">{@render children()}</h3>
+	<h3 class="text-2xl font-bold text-black {className}">{@render children()}</h3>
 {:else if variant === 'h4'}
-	<h4 class="text-xl font-bold {className}">{@render children()}</h4>
+	<h4 class="text-xl font-bold text-black {className}">{@render children()}</h4>
 {:else if variant === 'h5'}
 	<h5 class="text-lg font-bold {className}">{@render children()}</h5>
 {:else if variant === 'h6'}

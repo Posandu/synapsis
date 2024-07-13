@@ -14,6 +14,8 @@ declare global {
 			type Message = {
 				type: 'error' | 'success';
 				text: string;
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				data?: any;
 			};
 		}
 	}

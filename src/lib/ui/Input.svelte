@@ -10,7 +10,8 @@
 		error = undefined,
 		name = undefined,
 		placeholder = undefined,
-		autocomplete = undefined
+		autocomplete = undefined,
+		class: className = ''
 	}: {
 		value: string;
 		type?: 'text' | 'password';
@@ -21,10 +22,11 @@
 		name?: string;
 		placeholder?: string;
 		autocomplete?: AutoFill;
+		class?: string;
 	} = $props();
 </script>
 
-<label class="w-full">
+<label class="w-full block {className}">
 	<label class="input input-bordered flex items-center justify-center gap-2">
 		{#if before}
 			{@render before()}
