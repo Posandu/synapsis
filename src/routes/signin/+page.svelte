@@ -1,0 +1,94 @@
+<script lang="ts">
+	import Icon from '@iconify/svelte';
+	import { superForm } from 'sveltekit-superforms';
+	import type { PageData } from './$types';
+	import { fade } from 'svelte/transition';
+	import Button from '$lib/ui/Button.svelte';
+	import Input from '$lib/ui/Input.svelte';
+	import Typography from '$lib/ui/Typography.svelte';
+	import Alert from '$lib/ui/Alert.svelte';
+
+	let {
+		data
+	}: {
+		data: PageData;
+	} = $props();
+
+	let passwordShown = $state(false);
+
+	const { form, message, errors, delayed, enhance, constraints } = superForm(data.form, {
+		resetForm: false,
+		delayMs: 0
+	});
+</script>
+
+<div class="relative flex min-h-svh items-center justify-center">
+	<div class="relative w-full max-w-xs text-center">
+		<div class="flex-1">
+			<Typography variant="h2" class="mb-4">Sign In</Typography>
+			<Typography variant="subtitle" class="mb-8">
+				Welcome back! Please sign in to your account.
+			</Typography>
+
+			{#if $message && $message.type == 'error'}
+				<Alert type="error" class="mb-4 mt-1">{$message.text}</Alert>
+			{/if}
+		</div>
+
+		<form method="POST" class="flex flex-col gap-4" use:enhance>
+			{#snippet UsernameBefore()}
+				<Icon icon="mdi:account" class="opacity-70" />
+			{/snippet}
+
+			{#snippet PasswordIconBefore()}
+				<Icon icon="mdi:lock" class="opacity-70" />
+			{/snippet}
+
+			{#snippet PasswordIconAfter()}
+				<button
+					class="btn btn-circle btn-ghost btn-xs text-lg opacity-70"
+					type="button"
+					onclick={() => (passwordShown = !passwordShown)}
+				>
+					{#if passwordShown}
+						<span transition:fade={{ duration: 100 }} class="absolute">
+							<Icon icon="mdi:eye" />
+						</span>
+					{:else}
+						<span transition:fade={{ duration: 100 }} class="absolute">
+							<Icon icon="mdi:eye-off" />
+						</span>
+					{/if}
+				</button>
+			{/snippet}
+
+			<Input
+				before={UsernameBefore}
+				bind:value={$form.username}
+				error={$errors.username?.join('')}
+				otherProps={$constraints.username}
+				autocomplete="username"
+				name="username"
+				placeholder="Username"
+			/>
+
+			<Input
+				type={passwordShown ? 'text' : 'password'}
+				before={PasswordIconBefore}
+				after={PasswordIconAfter}
+				bind:value={$form.password}
+				error={$errors.password?.join('')}
+				otherProps={$constraints.password}
+				autocomplete="current-password"
+				name="password"
+				placeholder="Password"
+			/>
+
+			<Button disabled={$delayed} loading={$delayed} variant="primary">Sign in</Button>
+		</form>
+
+		<Typography variant="subtitle" class="mt-4">Don't have an account?</Typography>
+
+		<Button link="/signup" variant="neutral" class="mt-4 flex">Create Account</Button>
+	</div>
+</div>
