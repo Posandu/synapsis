@@ -25,7 +25,7 @@
 	let {
 		selectedCategory = $bindable(null)
 	}: {
-		selectedCategory: Category | null;
+		selectedCategory?: Category | null;
 	} = $props();
 
 	const loadCategories = async () => {
@@ -33,7 +33,15 @@
 
 		await wait(400); // prevent that ugly layout shift
 
-		categories = (await fetcher<Category[]>('/api/categories')).data;
+		const data = await fetcher<Category[]>('/api/categories');
+
+		if (!data.success) {
+			toast.error(data.message || 'Failed to load categories');
+			loading = false;
+			return;
+		}
+
+		categories = data.data;
 
 		loading = false;
 	};
@@ -41,12 +49,12 @@
 	const createCategory = async () => {
 		categoryCreateLoading = true;
 
-		const { success, message: errMsg } = await fetcher('/api/categories', {
+		const data = await fetcher('/api/categories', {
 			method: 'POST',
 			body: JSON.stringify({ name: categoryVal })
 		});
 
-		if (success) {
+		if (data.success) {
 			categoryVal = '';
 			createCategoryOpen = false;
 			categoryCreateLoading = false;
@@ -56,7 +64,7 @@
 		} else {
 			categoryCreateLoading = false;
 
-			toast.error(errMsg || 'Failed to create category');
+			toast.error(data.message || 'Failed to create category');
 		}
 	};
 

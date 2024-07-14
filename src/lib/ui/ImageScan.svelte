@@ -151,12 +151,12 @@
 
 {#if currentState == 'loadingCamera'}
 	<div class="w-full text-center">
-		<Typography variant="subtitle" class="mx-auto mb-4 max-w-sm">Loading camera...</Typography>
+		<Typography variant="subtitle" class="mx-auto max-w-sm">Loading camera...</Typography>
 	</div>
 {/if}
 
 {#if currentState == 'loadCameraError'}
-	<Alert type="error" class="mx-auto mb-4 max-w-sm">Could not start the webcam</Alert>
+	<Alert type="error" class="mx-auto max-w-sm">Could not start the webcam</Alert>
 {/if}
 
 {#if currentState == 'loadedCamera'}

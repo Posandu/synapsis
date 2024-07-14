@@ -27,6 +27,20 @@ class Category {
 				user: {
 					id: userID
 				}
+			},
+			select: {
+				id: true,
+				name: true,
+				_count: {
+					select: {
+						notes: true
+					}
+				}
+			},
+			orderBy: {
+				notes: {
+					_count: 'desc'
+				}
 			}
 		});
 

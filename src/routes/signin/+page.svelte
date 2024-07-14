@@ -87,7 +87,8 @@
 				placeholder="Password"
 			/>
 
-			<Button disabled={$delayed} loading={$delayed} variant="primary">Sign in</Button>
+			<Button disabled={$delayed} type="submit" loading={$delayed} variant="primary">Sign in</Button
+			>
 		</form>
 
 		<Typography variant="subtitle" class="mt-4">Don't have an account?</Typography>

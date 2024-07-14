@@ -29,6 +29,62 @@ class Notes {
 		return note;
 	}
 
+	static async update({
+		id,
+		title,
+		content,
+		categoryID,
+		userID
+	}: {
+		id: string;
+		title: string;
+		content: string;
+		categoryID: string;
+		userID: string;
+	}) {
+		const existingNote = await Notes.find({ id, userID });
+
+		if (!existingNote) {
+			throw new Error('Note not found');
+		}
+
+		const note = await prisma.note.update({
+			where: {
+				id,
+				user: {
+					id: userID
+				}
+			},
+			data: {
+				title,
+				content,
+				category: {
+					connect: {
+						id: categoryID
+					}
+				}
+			}
+		});
+
+		return note;
+	}
+
+	static async delete({ id, userID }: { id: string; userID: string }) {
+		const existingNote = await Notes.find({ id, userID });
+
+		if (!existingNote) {
+			throw new Error('Note not found');
+		}
+
+		const note = await prisma.note.delete({
+			where: {
+				id
+			}
+		});
+
+		return note;
+	}
+
 	static async find({ userID, id }: { userID: string; id: string }) {
 		const note = await prisma.note.findUnique({
 			where: {
@@ -36,6 +92,9 @@ class Notes {
 				user: {
 					id: userID
 				}
+			},
+			include: {
+				category: true
 			}
 		});
 
@@ -57,6 +116,25 @@ class Notes {
 				category: {
 					id: categoryID
 				}
+			},
+			select: {
+				category: {
+					select: {
+						name: true,
+						notes: false,
+						user: false,
+						userId: false,
+						id: true
+					}
+				},
+				categoryId: false,
+				content: false,
+				createdAt: true,
+				user: false,
+				id: true,
+				title: true,
+				updatedAt: true,
+				userId: false
 			}
 		});
 

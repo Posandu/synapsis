@@ -13,7 +13,8 @@
 		icon = undefined,
 		children = undefined,
 		onclick = undefined,
-		size = undefined
+		size = undefined,
+		type = 'button'
 	}: {
 		loading?: boolean;
 		disabled?: boolean;
@@ -31,6 +32,7 @@
 			| 'ghost'
 			| undefined;
 		size?: 'sm' | 'md' | 'lg';
+		type?: 'button' | 'submit' | 'reset';
 		children?: Snippet;
 		onclick?: () => void;
 	} = $props();
@@ -90,7 +92,7 @@
 {/snippet}
 
 {#if !link}
-	<button class={classes} {...dynamicProps}>
+	<button class={classes} {type} {...dynamicProps}>
 		{@render c()}
 	</button>
 {:else}
