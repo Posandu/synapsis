@@ -14,6 +14,7 @@
 @layer components {
 	.btn {
 		box-shadow: var(--subtle-inset-shadow);
+		animation: none;
 	}
 }
 

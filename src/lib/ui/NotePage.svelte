@@ -5,7 +5,7 @@
 	import { fade, scale } from 'svelte/transition';
 	import { Carta, MarkdownEditor } from 'carta-md';
 	import SuperDebug, { superForm } from 'sveltekit-superforms';
-	import { fetcher, wait } from '$lib/util';
+	import { fetcher, goBack, wait } from '$lib/util';
 	import { goto } from '$app/navigation';
 	import Button from '$lib/ui/Button.svelte';
 	import Typography from '$lib/ui/Typography.svelte';
@@ -15,6 +15,7 @@
 	import ImageScan from '$lib/ui/ImageScan.svelte';
 	import toast from 'svelte-french-toast';
 	import type { PageData } from '../../routes/(loggedIn)/notes/new/$types';
+	import { newNoteInitialCategoryStore } from '$lib/store.svelte';
 
 	const carta = new Carta({
 		sanitizer: DOMPurify.sanitize
@@ -113,6 +114,10 @@
 			value = initialValues.content;
 			selectedCategory = initialValues.category;
 			$form.title = initialValues.title;
+		} else if (newNoteInitialCategoryStore.category) {
+			selectedCategory = newNoteInitialCategoryStore.category;
+
+			newNoteInitialCategoryStore.reset();
 		}
 	});
 
@@ -233,7 +238,12 @@
 <form method="POST" use:enhance>
 	<div class="mb-4 flex w-full gap-4 align-baseline">
 		<div class="flex items-baseline align-baseline">
-			<Button link="/notes" icon="mdi:arrow-left"></Button>
+			<Button
+				onclick={() => {
+					goBack('/notes');
+				}}
+				icon="mdi:arrow-left"
+			></Button>
 		</div>
 
 		<div class="flex-1">

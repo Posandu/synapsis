@@ -30,7 +30,7 @@ export const PLACEHOLDER = `What the devil. Isn't that fantastic? Just go back a
 Fluff it up a little and hypnotize it. Let your heart take you to wherever you want to be. You have to make those little noises or it won't work. Work that paint. Tree trunks grow however makes them happy.
 `;
 
-export const stringToColour = (str: string) => {
+export const stringToColor = (str: string) => {
 	let hash = 0;
 	str.split('').forEach((char) => {
 		hash = char.charCodeAt(0) + ((hash << 5) - hash);
@@ -47,4 +47,21 @@ export const stringToColour = (str: string) => {
 export const screamToTheVoid = (stuff: any) => {
 	const a = typeof stuff;
 	document.createElement('div').innerHTML = a + '';
+};
+
+function historyBackWFallback(fallbackUrl?: string) {
+	fallbackUrl = fallbackUrl || '/';
+	const prevPage = window.location.href;
+
+	window.history.go(-1);
+
+	setTimeout(function () {
+		if (window.location.href == prevPage) {
+			window.location.href = fallbackUrl;
+		}
+	}, 500);
+}
+
+export const goBack = (initial?: string) => {
+	historyBackWFallback(initial);
 };

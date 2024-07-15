@@ -21,6 +21,57 @@ class Category {
 		return created;
 	}
 
+	static async getNotes({ categoryID, userID }: { categoryID: string; userID: string }) {
+		const category = await prisma.category.findFirst({
+			where: {
+				id: categoryID,
+				user: {
+					id: userID
+				}
+			}
+		});
+
+		if (!category) throw new Error('Category not found');
+
+		const notes = await prisma.note.findMany({
+			where: {
+				user: {
+					id: userID
+				},
+				category: {
+					id: categoryID
+				}
+			},
+			select: {
+				id: true,
+				title: true,
+				createdAt: true,
+				updatedAt: true
+			},
+			orderBy: {
+				createdAt: 'desc'
+			}
+		});
+
+		return {
+			notes,
+			category
+		};
+	}
+
+	static async delete({ categoryID, userID }: { categoryID: string; userID: string }) {
+		const deleted = await prisma.category.deleteMany({
+			where: {
+				id: categoryID,
+				user: {
+					id: userID
+				}
+			}
+		});
+
+		return deleted;
+	}
+
 	static async getAll(userID: string) {
 		const categories = await prisma.category.findMany({
 			where: {

@@ -3,19 +3,14 @@
 	import Button from '$lib/ui/Button.svelte';
 	import Categories from '$lib/ui/Categories.svelte';
 	import Typography from '$lib/ui/Typography.svelte';
-	import { screamToTheVoid, stringToColour } from '$lib/util';
+	import { stringToColor } from '$lib/util';
 	import { Dialog } from 'bits-ui';
+	import { ripple } from 'svelte-ripple-action';
 	import { fade, scale } from 'svelte/transition';
 
 	let { data } = $props();
 
 	let viewCategoriesDialogOpen = $state(false);
-
-	$effect(() => {
-		invalidateAll();
-
-		screamToTheVoid(viewCategoriesDialogOpen);
-	});
 </script>
 
 <div class="flex w-full align-baseline">
@@ -78,26 +73,24 @@
 {:else}
 	<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
 		{#each data.categories as category}
-			{@const color = stringToColour(category.id)}
+			{@const color = stringToColor(category.id)}
 
 			<a
-				class="item rounded-lg p-5 transition-all hover:bg-gray-200 active:scale-95 active:bg-gray-200"
+				class="item group relative rounded-lg border p-5 transition-all hover:bg-base-200 focus-visible:ring-4 active:bg-base-200 active:shadow"
 				href="/notes/category/{category.id}"
-				style="--c: {color}"
 			>
-				<Typography variant="h5" class="relative">{category.name}</Typography>
+				<Typography variant="h4" class="relative">{category.name}</Typography>
 				<Typography variant="subtitle" class="relative mt-4">
 					{category._count.notes} notes
 				</Typography>
+
+				<div
+					class="absolute right-5 top-5 size-4 rounded-full opacity-0 group-hover:opacity-60"
+					style="background-color: {color}"
+				></div>
 			</a>
 		{/each}
 	</div>
 {/if}
 
 {@render ViewCategoriesDialog()}
-
-<style>
-	.item {
-		box-shadow: inset 0 0 100px color-mix(in srgb, var(--c), white 80%);
-	}
-</style>
