@@ -4,7 +4,7 @@ function createNewNoteInitialCategoryStore() {
 	let id = $state<Category | undefined>();
 
 	return {
-		get category(): Category | undefined {
+		get category() {
 			return id;
 		},
 		update(val: Category) {
@@ -16,6 +16,71 @@ function createNewNoteInitialCategoryStore() {
 	};
 }
 
+function createNewQuizInitialItemsStore() {
+	type Item = {
+		id: string;
+		title: string;
+	};
+
+	let notes = $state<Item[] | undefined>();
+
+	return {
+		get notes() {
+			return notes;
+		},
+		addItem(val: Item) {
+			notes = notes ? [...notes, val] : [val];
+		},
+		reset() {
+			notes = undefined;
+		},
+		removeItem(id: string) {
+			notes = notes?.filter((item) => item.id !== id);
+		}
+	};
+}
+
+function createNewFlashcardInitialItemsStore() {
+	let noteIds = $state<string[] | undefined>();
+
+	return {
+		get noteIds() {
+			return noteIds;
+		},
+		update(val: string[]) {
+			noteIds = val;
+		},
+		reset() {
+			noteIds = undefined;
+		}
+	};
+}
+
+function createNewRecallItemStore() {
+	let noteId = $state<string | undefined>();
+
+	return {
+		get noteId() {
+			return noteId;
+		},
+		update(val: string) {
+			noteId = val;
+		},
+		reset() {
+			noteId = undefined;
+		}
+	};
+}
+
 const newNoteInitialCategoryStore = createNewNoteInitialCategoryStore();
 
-export { newNoteInitialCategoryStore };
+const newQuizInitialStore = createNewQuizInitialItemsStore();
+const newFlashcardInitialStore = createNewFlashcardInitialItemsStore();
+const newRecallItemStore = createNewRecallItemStore();
+
+export {
+	newNoteInitialCategoryStore,
+	newQuizInitialStore,
+	newFlashcardInitialStore,
+	newRecallItemStore
+};

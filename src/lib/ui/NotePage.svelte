@@ -84,7 +84,7 @@
 
 			await wait(800);
 
-			await goto('/notes');
+			goBack('/notes');
 		} else toast.error(resp.message || 'Failed to delete note. Please try again.');
 	};
 

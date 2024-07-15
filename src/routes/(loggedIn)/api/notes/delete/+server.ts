@@ -3,14 +3,12 @@ import { getErrorIfString, type APIReturnType } from '$lib/util';
 import { error, json } from '@sveltejs/kit';
 
 export const DELETE = async ({ locals, request }) => {
-	if (!locals.user || !locals.session) return error(400);
-
 	const { id } = await request.json();
 
 	if (!id) return error(400);
 
 	try {
-		await Notes.delete({ id, userID: locals.user.id });
+		await Notes.delete({ id, userID: locals.user!.id });
 
 		return json({
 			success: true,

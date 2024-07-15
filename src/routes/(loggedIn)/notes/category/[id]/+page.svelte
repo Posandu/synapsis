@@ -2,11 +2,18 @@
 	import Button from '$lib/ui/Button.svelte';
 	import Input from '$lib/ui/Input.svelte';
 	import Typography from '$lib/ui/Typography.svelte';
-	import { fetcher, goBack, wait } from '$lib/util';
+	import { fetcher, goBack, screamToTheVoid, wait } from '$lib/util';
 	import clsx from 'clsx';
-	import { newNoteInitialCategoryStore } from '$lib/store.svelte';
+	import {
+		newFlashcardInitialStore,
+		newNoteInitialCategoryStore,
+		newQuizInitialStore,
+		newRecallItemStore
+	} from '$lib/store.svelte';
 	import toast from 'svelte-french-toast';
 	import { goto } from '$app/navigation';
+	import debounce from 'debounce';
+	import Note from '$lib/ui/Note.svelte';
 
 	const { data } = $props();
 
@@ -21,6 +28,56 @@
 	let selectedItems = $state<string[]>([]);
 	let deleting = $state(false);
 
+	let title = $state(data.category.name);
+	let previousTitle = $state(data.category.name);
+
+	let selectMenu = $state<HTMLElement | undefined>();
+	let selectMenuSticky = $state(false);
+
+	const updateTitle = async (newTitle: string) => {
+		const res = await fetcher(`/api/categories`, {
+			method: 'PATCH',
+			body: JSON.stringify({ id: data.category.id, name: newTitle })
+		});
+
+		if (res.success) {
+			previousTitle = newTitle;
+		} else {
+			throw new Error();
+		}
+	};
+
+	const debouncedUpdate = debounce(() => {
+		toast.promise(updateTitle(title), {
+			loading: 'Updating category name...',
+			error: 'An error occurred while updating the category name.',
+			success: 'Category name updated successfully.'
+		});
+	}, 500);
+
+	$effect(() => {
+		if (title == previousTitle) return;
+
+		debouncedUpdate();
+	});
+
+	$effect(() => {
+		const observer = new IntersectionObserver(
+			([e]) => (selectMenuSticky = e.intersectionRatio < 1),
+			{ threshold: [1] }
+		);
+
+		if (selectMenu) {
+			observer.observe(selectMenu);
+		}
+
+		return () => {
+			if (selectMenu) {
+				observer.unobserve(selectMenu);
+			}
+		};
+	});
+
 	const deleteCat = async () => {
 		if (
 			!confirm(
@@ -30,21 +87,23 @@
 			return;
 		}
 
-		if (
-			!confirm(
-				'Are you really sure? **Everything** (including notes) in this category will be lost. You can delete the notes individually or move them to another category if you want to keep them.'
-			)
-		) {
-			return;
-		}
+		if (data.notes.length > 0) {
+			if (
+				!confirm(
+					'Are you really sure? **Everything** (including notes) in this category will be lost. You can delete the notes individually or move them to another category if you want to keep them.'
+				)
+			) {
+				return;
+			}
 
-		const type = 'delete-' + data.category.name + '-' + Math.floor(Math.random() * 1000);
-		const inp = prompt('Type "' + type + '" to confirm deletion.');
+			const type = 'delete-' + data.category.name + '-' + Math.floor(Math.random() * 1000);
+			const inp = prompt('Type "' + type + '" to confirm deletion.');
 
-		if (inp !== type) {
-			alert('The confirmation text did not match.');
+			if (inp !== type) {
+				alert('The confirmation text did not match.');
 
-			return;
+				return;
+			}
 		}
 
 		deleting = true;
@@ -79,7 +138,7 @@
 	</div>
 
 	<div class="flex-1">
-		<Typography variant="h1">{data.category?.name}</Typography>
+		<input bind:value={title} class="text-4xl font-bold text-black" />
 
 		<Typography variant="subtitle" class="mt-3 max-w-xl">
 			{data.notes.length} notes in this category
@@ -102,7 +161,12 @@
 			variant="primary"
 			onclick={() => {
 				selectItemsOpen = !selectItemsOpen;
+
+				if (!selectItemsOpen) {
+					selectedItems = [];
+				}
 			}}
+			disabled={data.notes.length < 1}
 		>
 			{selectItemsOpen ? 'Cancel selection' : 'Select notes'}
 		</Button>
@@ -128,7 +192,12 @@
 </div>
 
 {#if selectItemsOpen}
-	<div class="sticky top-0 z-50 mb-4 flex items-baseline justify-between border-b bg-base-100 py-2">
+	<div
+		class="sticky -top-[1px] z-50 mb-4 flex items-baseline justify-between bg-base-100 py-2 {clsx(
+			selectMenuSticky && 'border-b'
+		)}"
+		bind:this={selectMenu}
+	>
 		<Typography variant="subtitle">
 			Selected {selectedItems.length} note{selectedItems.length > 1 ? 's' : ''}
 		</Typography>
@@ -153,17 +222,52 @@
                 Then compare it with the original note to see what you missed.
             `
 					: `
-                Only one note can be selected for this action.
+                Only one note can be selected for recall.
             `}
 			>
-				<Button size="sm" variant="primary" disabled={selectedItems.length !== 1}>
-					Memory Echo
+				<Button
+					size="sm"
+					variant="primary"
+					disabled={selectedItems.length !== 1}
+					onclick={() => {
+						newRecallItemStore.update(selectedItems[0]);
+
+						goto('/practice/recall/new');
+					}}
+				>
+					Recall
 				</Button>
 			</div>
 
 			{#snippet Actions()}
-				<Button size="sm" disabled={selectedItems.length < 1} variant="primary">Make quiz</Button>
-				<Button size="sm" disabled={selectedItems.length < 1} variant="primary">
+				<Button
+					size="sm"
+					disabled={selectedItems.length < 1}
+					variant="primary"
+					onclick={() => {
+						selectedItems.forEach((id) =>
+							newQuizInitialStore.addItem({
+								id,
+								title: data.notes.find((note) => note.id === id)!.title
+							})
+						);
+
+						goto('/practice/quizzes/new');
+					}}
+				>
+					Make quiz
+				</Button>
+
+				<Button
+					size="sm"
+					disabled={selectedItems.length < 1}
+					variant="primary"
+					onclick={() => {
+						newFlashcardInitialStore.update(selectedItems);
+
+						goto('/practice/flashcards/new');
+					}}
+				>
 					Make flashcards
 				</Button>
 			{/snippet}
@@ -186,11 +290,15 @@
 	{#each filtered as note}
 		{@const selected = selectedItems.includes(note.id)}
 
-		<a
-			class="flex flex-col rounded-box border p-4 shadow-sm transition-all hover:shadow-lg {clsx(
-				selected && 'border-primary bg-primary text-white'
-			)}"
-			href="/notes/{note.id}"
+		<Note
+			note={{
+				createdAt: note.createdAt,
+				id: note.id,
+				title: note.title,
+				updatedAt: note.updatedAt,
+				quiz: note.quiz?.id
+			}}
+			{selected}
 			onclick={(e) => {
 				if (selectItemsOpen) {
 					e.preventDefault();
@@ -202,17 +310,7 @@
 					}
 				}
 			}}
-		>
-			<Typography variant="h4" class="mb-2 {clsx(selected && 'text-white')} font-medium opacity-95">
-				{note.title}
-			</Typography>
-
-			<div class="h-6"></div>
-
-			<Typography variant="subtitle" class="mt-auto">
-				Last edited on {new Date(note.updatedAt || note.createdAt).toLocaleString()}
-			</Typography>
-		</a>
+		/>
 	{/each}
 </div>
 

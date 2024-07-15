@@ -1,11 +1,9 @@
 <script lang="ts">
-	import { invalidate, invalidateAll } from '$app/navigation';
 	import Button from '$lib/ui/Button.svelte';
 	import Categories from '$lib/ui/Categories.svelte';
 	import Typography from '$lib/ui/Typography.svelte';
 	import { stringToColor } from '$lib/util';
 	import { Dialog } from 'bits-ui';
-	import { ripple } from 'svelte-ripple-action';
 	import { fade, scale } from 'svelte/transition';
 
 	let { data } = $props();

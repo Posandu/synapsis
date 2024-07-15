@@ -46,7 +46,12 @@ class Category {
 				id: true,
 				title: true,
 				createdAt: true,
-				updatedAt: true
+				updatedAt: true,
+				quiz: {
+					select: {
+						id: true
+					}
+				}
 			},
 			orderBy: {
 				createdAt: 'desc'
@@ -70,6 +75,30 @@ class Category {
 		});
 
 		return deleted;
+	}
+
+	static async update({
+		categoryID,
+		userID,
+		name
+	}: {
+		categoryID: string;
+		userID: string;
+		name: string;
+	}) {
+		const updated = await prisma.category.updateMany({
+			where: {
+				id: categoryID,
+				user: {
+					id: userID
+				}
+			},
+			data: {
+				name
+			}
+		});
+
+		return updated;
 	}
 
 	static async getAll(userID: string) {

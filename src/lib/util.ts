@@ -6,6 +6,24 @@ export const getErrorIfString = (value: any, fallback: string) => {
 
 export const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
+export type QuizQuestion =
+	| {
+			type: 'multiple-choice';
+			question: string;
+			options: string[];
+			optionAnswer: string;
+	  }
+	| {
+			type: 'written';
+			question: string;
+			answerKeywords: string[];
+	  };
+
+export type QuizItem = {
+	title: string;
+	questions: QuizQuestion[];
+};
+
 export type APIReturnType<T> =
 	| {
 			success: false;
@@ -65,3 +83,56 @@ function historyBackWFallback(fallbackUrl?: string) {
 export const goBack = (initial?: string) => {
 	historyBackWFallback(initial);
 };
+
+const feedbackMessages = [
+	{
+		range: [90, 100],
+		message: "Outstanding performance! You've demonstrated excellent knowledge."
+	},
+	{
+		range: [80, 89],
+		message: 'Great job! You have a strong understanding of the material.'
+	},
+	{
+		range: [70, 79],
+		message: "Good effort! You have a good grasp of the content but there's room for improvement."
+	},
+	{
+		range: [60, 69],
+		message: 'Fair performance. Consider reviewing the material to strengthen your understanding.'
+	},
+	{
+		range: [50, 59],
+		message: "You passed, but there's significant room for improvement. Keep studying!"
+	},
+	{
+		range: [0, 49],
+		message:
+			"Unfortunately, you did not pass. Don't be discouraged! Review the material and try again."
+	}
+];
+
+export function getFeedbackMessage(score: number) {
+	for (let i = 0; i < feedbackMessages.length; i++) {
+		const [min, max] = feedbackMessages[i].range;
+		if (score >= min && score <= max) {
+			return feedbackMessages[i].message;
+		}
+	}
+	return 'Invalid score.';
+}
+
+export function validateWrittenAnswer(userAnswer: string, correctAnswerKeywords: string[]) {
+	const userWords = userAnswer.toLowerCase().split(/\W+/);
+	const keywords = correctAnswerKeywords.map((keyword) => keyword.toLowerCase());
+
+	let score = 0;
+	keywords.forEach((keyword) => {
+		if (userWords.includes(keyword)) {
+			score += 1;
+		}
+	});
+
+	const threshold = keywords.length * 0.7; // 70% match threshold
+	return score >= threshold;
+}

@@ -1,5 +1,5 @@
-import { AI } from '$lib/controllers/AI';
 import { PLACEHOLDER, wait, type APIReturnType } from '$lib/util';
+import { AI } from '$lib/controllers/AI';
 import { json } from '@sveltejs/kit';
 
 const DEV = true;
@@ -27,7 +27,7 @@ export const POST = async ({ request }) => {
 
 		return json({
 			success: true,
-			data: PLACEHOLDER + "\n Ayo, fixed da errors"
+			data: PLACEHOLDER + '\n Ayo, fixed da errors'
 		} satisfies APIReturnType<string>);
 	}
 

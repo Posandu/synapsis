@@ -14,7 +14,8 @@
 		children = undefined,
 		onclick = undefined,
 		size = undefined,
-		type = 'button'
+		type = 'button',
+		openLinkInNewTab = false
 	}: {
 		loading?: boolean;
 		disabled?: boolean;
@@ -34,6 +35,7 @@
 		size?: 'sm' | 'md' | 'lg';
 		type?: 'button' | 'submit' | 'reset';
 		children?: Snippet;
+		openLinkInNewTab?: boolean;
 		onclick?: () => void;
 	} = $props();
 
@@ -43,6 +45,7 @@
 		if (disabled) obj.disabled = true;
 		if (link) obj.href = link;
 		if (onclick) obj.onclick = onclick;
+		if (openLinkInNewTab) obj.target = '_blank';
 
 		return obj;
 	});

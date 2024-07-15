@@ -13,9 +13,12 @@ model User {
   password_hash String
   createdAt     DateTime @default(now())
 
-  sessions Session[]
-  Note     Note[]
-  Category Category[]
+  sessions        Session[]
+  notes           Note[]
+  categories      Category[]
+  quizzes         Quiz[]
+  userPoints      UserPoints[]
+  practiceHistory PracticeHistory[]
 }
 
 model Category {
@@ -38,6 +41,38 @@ model Note {
 
   category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quiz     Quiz?
+}
+
+model Quiz {
+  id     String @id @default(uuid())
+  title  String
+  data   Json
+  userId String
+  noteID String @unique
+
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  practiceHistory PracticeHistory[]
+  note            Note              @relation(fields: [noteID], references: [id], onDelete: Cascade)
+}
+
+model UserPoints {
+  id     String   @id @default(uuid())
+  userId String
+  points Int
+  date   DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model PracticeHistory {
+  id     String   @id @default(uuid())
+  userId String
+  date   DateTime @default(now())
+  quizId String
+
+  quiz Quiz @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Session {
