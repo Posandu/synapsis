@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { invalidate } from '$app/navigation';
+	import BlankState from '$lib/ui/BlankState.svelte';
 	import Button from '$lib/ui/Button.svelte';
 	import Categories from '$lib/ui/Categories.svelte';
 	import Typography from '$lib/ui/Typography.svelte';
@@ -72,7 +73,7 @@
 {/snippet}
 
 {#if data.categories.length == 0}
-	<Typography variant="subtitle" class="mt-4">You don't have any notes yet.</Typography>
+	<BlankState />
 {:else}
 	<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
 		{#each data.categories as category}

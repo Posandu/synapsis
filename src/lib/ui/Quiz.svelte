@@ -1,9 +1,17 @@
 <script lang="ts">
-	import { getFeedbackMessage, validateWrittenAnswer, type QuizQuestion } from '$lib/util';
+	import { xpStore } from '$lib/store.svelte';
+	import {
+		fetcher,
+		getFeedbackMessage,
+		validateWrittenAnswer,
+		XP,
+		type QuizQuestion
+	} from '$lib/util';
 	import Confetti from 'svelte-confetti';
 
 	let {
-		data
+		data,
+		id
 	}: {
 		data: {
 			title: string;
@@ -12,13 +20,36 @@
 				__correct?: boolean;
 			})[];
 		};
+		id: string;
 	} = $props();
 
 	let currentQuestion = $state(-1);
 	let score = $state(0);
 	let scorePercentage = $derived((score / data.questions.length) * 100);
+	let quizCompleted = $derived(currentQuestion === -2);
+	let tracked = false;
 
-	$inspect(data);
+	const track = () => {
+		const perc = (score / data.questions.length) * 100;
+
+		fetcher('/api/quiz', {
+			method: 'PATCH',
+			body: JSON.stringify({
+				id,
+				score: perc
+			})
+		});
+
+		xpStore.addXP(perc > 50 ? XP.QUIZ_COMPLETED : 0);
+	};
+
+	$effect(() => {
+		if (quizCompleted && !tracked) {
+			track();
+
+			tracked = true;
+		}
+	});
 </script>
 
 <div class="relative flex min-h-[500px] flex-col overflow-hidden rounded-lg border bg-blue-900">

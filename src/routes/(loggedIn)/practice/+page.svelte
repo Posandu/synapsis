@@ -3,7 +3,10 @@
 	import DidYouKnow from '$lib/ui/DidYouKnow.svelte';
 	import PointsPerDayChart from '$lib/ui/PointsPerDayChart.svelte';
 	import PracticedComparisonChart from '$lib/ui/PracticedComparisonChart.svelte';
+	import PracticeHistory from '$lib/ui/PracticeHistory.svelte';
 	import Typography from '$lib/ui/Typography.svelte';
+
+	let { data } = $props();
 </script>
 
 <Typography variant="h1" class="mb-3">Practice</Typography>
@@ -70,4 +73,8 @@
 
 <Typography variant="h3" class="mb-4 mt-8">Practice History</Typography>
 
-<BlankState desc="Practice something to see your practice history here." />
+{#if data.history.length > 0}
+	<PracticeHistory items={data.history} />
+{:else}
+	<BlankState desc="Practice something to see your practice history here." />
+{/if}

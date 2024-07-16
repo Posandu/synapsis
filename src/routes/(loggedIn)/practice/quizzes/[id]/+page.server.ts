@@ -1,6 +1,5 @@
-import { Points } from '$lib/controllers/Points.js';
+import { PracticeHistory } from '$lib/controllers/PracticeHistory.js';
 import { Quiz } from '$lib/controllers/Quiz.js';
-import { XP } from '$lib/util.js';
 import { error } from '@sveltejs/kit';
 
 export const load = async ({ params: { id }, locals: { user } }) => {
@@ -8,10 +7,11 @@ export const load = async ({ params: { id }, locals: { user } }) => {
 
 	if (!quiz) return error(404, 'Quiz not found');
 
-	await Points.addPointsPerDay({
-		points: XP.QUIZ,
-		userID: user!.id
-	});
-
-	return { quiz };
+	return {
+		quiz,
+		history: await PracticeHistory.getHistory({
+			userID: user!.id,
+			quizID: id
+		})
+	};
 };

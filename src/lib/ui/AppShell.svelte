@@ -18,7 +18,7 @@
 		{
 			name: 'Home',
 			icon: 'material-symbols:home-outline',
-			link: '/'
+			link: '/home'
 		},
 		{
 			name: 'Notes',
@@ -45,7 +45,7 @@
 	});
 </script>
 
-<div class="flex min-h-screen">
+<div class="flex min-h-screen" data-sveltekit-preload-data="false">
 	<div class="sticky top-0 flex max-h-screen w-[5.4rem] min-w-[5.4rem] flex-col bg-base-200">
 		{#each menuItems as item}
 			<a

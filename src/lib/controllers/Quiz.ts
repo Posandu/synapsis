@@ -88,7 +88,7 @@ class Quiz {
 
 	static async getQuizzes(userID: string) {
 		const quizzes = await prisma.quiz.findMany({
-			where: { userId: userID },
+			where: { user: { id: userID } },
 			select: {
 				note: { select: { title: true, id: true } },
 				title: true,
@@ -103,6 +103,23 @@ class Quiz {
 	static async deleteQuiz({ quizID, userID }: { quizID: string; userID: string }) {
 		const quiz = await prisma.quiz.delete({
 			where: { id: quizID, userId: userID }
+		});
+
+		return quiz;
+	}
+
+	static async setPoints({
+		quizID,
+		points,
+		userID
+	}: {
+		quizID: string;
+		points: number;
+		userID: string;
+	}) {
+		const quiz = await prisma.quiz.update({
+			where: { id: quizID, user: { id: userID } },
+			data: { points }
 		});
 
 		return quiz;
