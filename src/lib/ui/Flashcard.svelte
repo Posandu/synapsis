@@ -2,14 +2,27 @@
 	import clsx from 'clsx';
 	import Typography from './Typography.svelte';
 	import Confetti from 'svelte-confetti';
+	import Button from './Button.svelte';
+	import { goBack } from '$lib/util';
+	import type { PracticeHistoryItem } from '$lib/controllers/PracticeHistory';
+	import PracticeHistory from './PracticeHistory.svelte';
+	import BlankState from './BlankState.svelte';
+	import { newQuizInitialStore } from '$lib/store.svelte';
+	import { goto } from '$app/navigation';
 
 	let {
-		flashcards
+		flashcards,
+		title,
+		history,
+		noteID
 	}: {
 		flashcards: {
 			front: string;
 			back: string;
 		}[];
+		title: string;
+		history: PracticeHistoryItem[];
+		noteID: string;
 	} = $props();
 
 	let currentCard = $state(0);
@@ -19,38 +32,113 @@
 		flipped = !flipped;
 	}
 
+	let ended = $state(false);
+
 	function nextCard() {
 		flipped = false;
-		currentCard = (currentCard + 1) % flashcards.length;
+
+		const next = currentCard + 1;
+
+		if (next < flashcards.length) {
+			currentCard = next;
+		}
+
+		if (next === flashcards.length) {
+			ended = true;
+		}
 	}
 </script>
 
-<div class="flex flex-col items-center">
-	<button class="flashcard" onclick={flipCard}>
-		<div class="flashcard__inner" class:flipped>
-			<div class="flashcard__back transition-all {clsx(!flipped && 'opacity-0')}">
-				{flipped ? flashcards[currentCard].back : ''}
-			</div>
-
-			<div class="flashcard__front">
-				{flashcards[currentCard].front}
-			</div>
-		</div>
-	</button>
-
-	{#if currentCard === flashcards.length - 1}
-		<Confetti />
-	{/if}
-
-	<div class="controls">
-		<button class="btn btn-neutral" onclick={flipCard}>Flip</button>
-		<button class="btn btn-neutral" onclick={nextCard}>Next</button>
+<div class="mb-8 flex w-full gap-4 align-baseline">
+	<div class="flex items-baseline align-baseline">
+		<Button
+			onclick={() => {
+				goBack('/practice/flashcards/');
+			}}
+			icon="mdi:arrow-left"
+		></Button>
 	</div>
 
-	<Typography variant="caption" class="mt-4">
-		{currentCard + 1} / {flashcards.length}
-	</Typography>
+	<div>
+		<Typography variant="h1">{title}</Typography>
+
+		<Typography variant="subtitle" class="mt-3 max-w-xl"
+			>Memorize hard facts with flashcards.</Typography
+		>
+	</div>
 </div>
+
+<div class="mt-16 flex flex-col items-center">
+	{#if ended}
+		<Confetti />
+
+		<div
+			class="flex h-[220px] w-[350px] flex-col items-center justify-center rounded-xl bg-primary p-4 text-white"
+		>
+			<Typography variant="h4" class="mb-4 max-w-xs text-center text-white">Well done!</Typography>
+
+			<Button
+				size="sm"
+				onclick={() => {
+					newQuizInitialStore.addItem({
+						id: noteID,
+						title: title
+					});
+
+					goto('/practice/quizzes/new');
+				}}
+				class="mb-4"
+			>
+				Take a quiz
+			</Button>
+			<Button
+				size="sm"
+				onclick={() => {
+					currentCard = 0;
+					ended = false;
+				}}
+				class="mb-4"
+			>
+				Retake flashcards
+			</Button>
+		</div>
+	{/if}
+
+	{#if !ended}
+		<button class="flashcard" onclick={flipCard}>
+			<div class="flashcard__inner" class:flipped>
+				<div class="flashcard__back transition-all {clsx(!flipped && 'opacity-0')}">
+					{flipped ? flashcards[currentCard].back : ''}
+				</div>
+
+				<div class="flashcard__front">
+					{flashcards[currentCard].front}
+				</div>
+			</div>
+		</button>
+
+		<div class="controls">
+			<button class="btn btn-neutral" onclick={flipCard}>Flip</button>
+			<button class="btn btn-neutral" onclick={nextCard}>Next</button>
+		</div>
+
+		<Typography variant="caption" class="mt-4">
+			{currentCard + 1} / {flashcards.length}
+		</Typography>
+	{/if}
+</div>
+
+<Typography variant="subtitle" class="mb-4 mt-8">Need more practice?</Typography>
+
+<Button link="/notes/{noteID}">View the note</Button>
+
+<Typography variant="h4" class="mb-4 mt-8">Activity</Typography>
+
+{#if history.length > 0}
+	<PracticeHistory items={history} />
+{:else}
+	<BlankState desc="Practice something to see your practice history here." />
+{/if}
 
 <style>
 	.flashcard {

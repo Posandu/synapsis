@@ -268,7 +268,12 @@
 					disabled={selectedItems.length < 1}
 					variant="primary"
 					onclick={() => {
-						newFlashcardInitialStore.update(selectedItems);
+						selectedItems.forEach((id) =>
+							newFlashcardInitialStore.addItem({
+								id,
+								title: data.notes.find((note) => note.id === id)!.title
+							})
+						);
 
 						goto('/practice/flashcards/new');
 					}}
@@ -290,7 +295,8 @@
 				id: note.id,
 				title: note.title,
 				updatedAt: note.updatedAt,
-				quiz: note.quiz?.id
+				quiz: note.quiz?.id,
+				flashcard: note.flashCard?.id
 			}}
 			{selected}
 			onclick={(e) => {

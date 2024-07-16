@@ -17,24 +17,6 @@
 
 <div class="grid grid-cols-3 gap-4">
 	<a
-		href="/practice/recall"
-		class="col-span-1 rounded-lg border border-pink-200 bg-pink-50 p-5 text-center transition-all hover:shadow-lg"
-	>
-		<img
-			class="mx-auto mb-4"
-			width="48"
-			height="48"
-			src="https://img.icons8.com/external-outline-geotatah/64/external-feasibility-product-management-outline-geotatah.png"
-			alt="external-feasibility-product-management-outline-geotatah"
-		/>
-
-		<Typography variant="h3" class="mt-2 text-pink-950">Recall</Typography>
-		<Typography variant="subtitle" class="mt-2 text-pink-950">
-			Type out what you remember from memory, and check how much you got right.
-		</Typography>
-	</a>
-
-	<a
 		href="/practice/quizzes"
 		class="col-span-1 rounded-lg border border-purple-200 bg-purple-50 p-5 text-center shadow transition-all hover:shadow-lg"
 	>
@@ -67,6 +49,24 @@
 		<Typography variant="h3" class="mt-2 text-blue-950">Flashcards</Typography>
 		<Typography variant="subtitle" class="mt-2 text-blue-950">
 			Flashcards are a great way to memorize information. Test yourself with flashcards.
+		</Typography>
+	</a>
+
+	<a
+		href="/practice/recall"
+		class="col-span-1 rounded-lg border border-pink-200 bg-pink-50 p-5 text-center transition-all hover:shadow-lg"
+	>
+		<img
+			class="mx-auto mb-4"
+			width="48"
+			height="48"
+			src="https://img.icons8.com/external-outline-geotatah/64/external-feasibility-product-management-outline-geotatah.png"
+			alt="external-feasibility-product-management-outline-geotatah"
+		/>
+
+		<Typography variant="h3" class="mt-2 text-pink-950">Recall</Typography>
+		<Typography variant="subtitle" class="mt-2 text-pink-950">
+			Type out what you remember from memory, and check how much you got right.
 		</Typography>
 	</a>
 </div>

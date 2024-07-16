@@ -19,9 +19,17 @@ class PracticeHistory {
 		});
 	}
 
-	static async getHistory({ userID, quizID }: { userID: string; quizID?: string }) {
+	static async getHistory({
+		userID,
+		quizID,
+		flashCardID
+	}: {
+		userID: string;
+		quizID?: string;
+		flashCardID?: string;
+	}) {
 		return await prisma.practiceHistory.findMany({
-			where: { user: { id: userID }, quiz: { id: quizID } },
+			where: { user: { id: userID }, quiz: { id: quizID }, flashCard: { id: flashCardID } },
 			include: {
 				quiz: {
 					select: {
@@ -35,7 +43,8 @@ class PracticeHistory {
 				},
 				flashCard: true
 			},
-			orderBy: { date: 'desc' }
+			orderBy: { date: 'desc' },
+			take: 100
 		});
 	}
 }

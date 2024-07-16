@@ -2,6 +2,7 @@ import { generateText } from 'ai';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { GOOGLE_AI_API_KEY } from '$env/static/private';
 import type { QuizItem } from '$lib/util';
+import type { FlashCardData } from './Flashcard';
 
 const MODEL_NAME = 'models/gemini-1.5-flash-latest';
 
@@ -27,6 +28,19 @@ Schema:
 \`
 
 Context:`,
+	FLASHCARD: `Generate flashcards from the given context. Make sure to include the title of the flashcard set. Return only the raw JSON without any formatting as returning anything else would break the parser. Keep the answers simple and to the point. Don't include any extra information.
+
+Schema:
+\`
+{
+	"title": "string"; // title of the flashcard set
+
+	"cards": {
+		"front": "string"; // front side of the flashcard
+		"back": "string"; // back side of the flashcard
+	}[];
+}
+\``,
 	CLEAN_DATA: `Generate a minimal representation of the given data. Remove redundant information such examples and keep only the required information. Return only the reponse.
 Input:`
 };
@@ -90,6 +104,29 @@ class AI {
 						{
 							type: 'text',
 							text: ACTION_PROMPTS.QUIZ + '\n text: ' + JSON.stringify(context)
+						}
+					]
+				}
+			]
+		});
+
+		try {
+			return JSON.parse(text);
+		} catch (error) {
+			throw new Error('Failed to parse quiz data: ' + error);
+		}
+	}
+
+	static async generateFlashCard(context: string): Promise<FlashCardData> {
+		const { text } = await generateText({
+			model: google(MODEL_NAME),
+			messages: [
+				{
+					role: 'user',
+					content: [
+						{
+							type: 'text',
+							text: ACTION_PROMPTS.FLASHCARD + '\n text: ' + JSON.stringify(context)
 						}
 					]
 				}

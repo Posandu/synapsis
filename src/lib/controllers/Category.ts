@@ -51,6 +51,11 @@ class Category {
 					select: {
 						id: true
 					}
+				},
+				flashCard: {
+					select: {
+						id: true
+					}
 				}
 			},
 			orderBy: {

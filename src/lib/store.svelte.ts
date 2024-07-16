@@ -1,5 +1,10 @@
 import type { Category } from '@prisma/client';
 
+type Item = {
+	id: string;
+	title: string;
+};
+
 function createNewNoteInitialCategoryStore() {
 	let id = $state<Category | undefined>();
 
@@ -17,11 +22,6 @@ function createNewNoteInitialCategoryStore() {
 }
 
 function createNewQuizInitialItemsStore() {
-	type Item = {
-		id: string;
-		title: string;
-	};
-
 	let notes = $state<Item[] | undefined>();
 
 	return {
@@ -41,17 +41,20 @@ function createNewQuizInitialItemsStore() {
 }
 
 function createNewFlashcardInitialItemsStore() {
-	let noteIds = $state<string[] | undefined>();
+	let notes = $state<Item[] | undefined>();
 
 	return {
-		get noteIds() {
-			return noteIds;
+		get notes() {
+			return notes;
 		},
-		update(val: string[]) {
-			noteIds = val;
+		addItem(val: Item) {
+			notes = notes ? [...notes, val] : [val];
 		},
 		reset() {
-			noteIds = undefined;
+			notes = undefined;
+		},
+		removeItem(id: string) {
+			notes = notes?.filter((item) => item.id !== id);
 		}
 	};
 }

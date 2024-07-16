@@ -41,10 +41,11 @@ model Note {
   categoryId String
   userId     String
 
-  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  quiz     Quiz?
-  recall   Recall?
+  category  Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quiz      Quiz?
+  recall    Recall?
+  flashCard FlashCard?
 }
 
 model Quiz {
@@ -63,10 +64,13 @@ model Quiz {
 model FlashCard {
   id     String @id @default(uuid())
   data   Json
+  title  String
   userId String
+  noteID String @unique
 
   user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   practiceHistory PracticeHistory[]
+  note            Note              @relation(fields: [noteID], references: [id], onDelete: Cascade)
 }
 
 model Recall {
@@ -83,7 +87,7 @@ model Recall {
 model UserXP {
   userId String
   points Int
-  date   DateTime @db.Date @default(now())
+  date   DateTime @default(now()) @db.Date
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 

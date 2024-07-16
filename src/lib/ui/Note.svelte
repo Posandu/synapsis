@@ -21,6 +21,7 @@
 			createdAt?: Date;
 			updatedAt?: Date;
 			quiz?: string | null;
+			flashcard?: string | null;
 		};
 		withLink?: boolean;
 	} = $props();
@@ -31,9 +32,15 @@
 		{note.title}
 	</Typography>
 
-	{#if note.quiz}
-		<span class="badge badge-ghost">Contains Quiz</span>
-	{/if}
+	<div>
+		{#if note.quiz}
+			<span class="badge badge-ghost">Quiz</span>
+		{/if}
+
+		{#if note.flashcard}
+			<span class="badge badge-ghost">Flashcard</span>
+		{/if}
+	</div>
 
 	{#if note.updatedAt && note.createdAt}
 		<div class="h-6"></div>

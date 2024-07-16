@@ -1,75 +1,80 @@
 <script lang="ts">
-	import type { Quiz } from '@prisma/client';
+	import type { FlashCard } from '@prisma/client';
 	import Button from './Button.svelte';
 	import Typography from './Typography.svelte';
 	import { fetcher } from '$lib/util';
 	import toast from 'svelte-french-toast';
 
 	let {
-		quiz,
+		flashcard,
 		class: className = '',
 		deleteCallBack
 	}: {
-		quiz: Pick<Quiz, 'id' | 'title' | 'points'> & {
+		flashcard: Pick<FlashCard, 'id' | 'title'> & {
 			note?: { title: string; id: string };
 		};
 		class?: string;
 		deleteCallBack: () => void;
 	} = $props();
 
-	const deleteQuiz = async () => {
-		if (!confirm('Are you sure you want to delete this quiz?')) return;
+	const deleteflashcards = async () => {
+		if (!confirm('Are you sure you want to delete this flashcard?')) return;
 
-		const res = await fetcher(`/api/quiz`, {
+		const res = await fetcher(`/api/flashcard`, {
 			method: 'DELETE',
-			body: JSON.stringify({ id: quiz.id })
+			body: JSON.stringify({ id: flashcard.id })
 		});
 
 		if (res.success) {
-			toast.success('Quiz deleted successfully');
+			toast.success('flashcard deleted successfully');
 
 			deleteCallBack();
 		} else {
-			toast.error('Failed to delete quiz');
+			toast.error('Failed to delete flashcards');
 		}
 	};
 </script>
 
 <div class="flex flex-col rounded-lg border bg-white p-4 shadow {className}">
 	<Typography variant="h4" class="mb-2 font-medium">
-		{quiz.title}
+		{flashcard.title}
 
-		<div class="tooltip" data-tip="Points gained from the last attempt">
-			<span class="badge badge-neutral">
-				{quiz.points} points
-			</span>
-		</div>
+		<div class="tooltip" data-tip="Points gained from the last attempt"></div>
 	</Typography>
 
-	{#if quiz.note}
+	{#if flashcard.note}
 		<div class="mb-4 flex items-center gap-2">
 			<Typography variant="subtitle" class="text-gray-500">
-				Generated using "{quiz.note.title}" note
+				Generated using "{flashcard.note.title}" note
 			</Typography>
 		</div>
 	{/if}
 
 	<div class="join mt-auto w-full flex-1 items-end">
-		<Button size="sm" variant="primary" class="join-item flex-1" link="/practice/quizzes/{quiz.id}">
+		<Button
+			size="sm"
+			variant="primary"
+			class="join-item flex-1"
+			link="/practice/flashcards/{flashcard.id}"
+		>
 			Start
 		</Button>
 
-		{#if quiz.note}
-			<Button size="sm" class="btn-outline join-item min-w-max flex-1" link="/notes/{quiz.note.id}">
+		{#if flashcard.note}
+			<Button
+				size="sm"
+				class="btn-outline join-item min-w-max flex-1"
+				link="/notes/{flashcard.note.id}"
+			>
 				Read Note
 			</Button>
 		{/if}
-		
+
 		<Button
 			size="sm"
 			class="btn-outline join-item flex-1"
 			onclick={() => {
-				deleteQuiz();
+				deleteflashcards();
 			}}
 		>
 			Delete
