@@ -23,15 +23,17 @@
 	let categoryCreateLoading = $state(false);
 
 	let {
-		selectedCategory = $bindable(null)
+		selectedCategory = $bindable(null),
+		refreshFn = () => {}
 	}: {
 		selectedCategory?: Category | null;
+		refreshFn?: () => void;
 	} = $props();
 
 	const loadCategories = async () => {
 		loading = true;
 
-		await wait(400); // prevent that ugly layout shift
+		await wait(400);
 
 		const data = await fetcher<Category[]>('/api/categories');
 
@@ -59,6 +61,8 @@
 			createCategoryOpen = false;
 			categoryCreateLoading = false;
 			toast.success('Category created successfully');
+
+			refreshFn();
 
 			await loadCategories();
 		} else {

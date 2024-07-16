@@ -16,9 +16,11 @@ model User {
   sessions        Session[]
   notes           Note[]
   categories      Category[]
-  quizzes         Quiz[]
-  userPoints      UserPoints[]
+  userPoints      UserXP[]
   practiceHistory PracticeHistory[]
+  quizzes         Quiz[]
+  flashCards      FlashCard[]
+  recalls         Recall[]
 }
 
 model Category {
@@ -42,6 +44,7 @@ model Note {
   category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   quiz     Quiz?
+  recall   Recall?
 }
 
 model Quiz {
@@ -50,29 +53,55 @@ model Quiz {
   data   Json
   userId String
   noteID String @unique
+  points Int
 
   user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   practiceHistory PracticeHistory[]
   note            Note              @relation(fields: [noteID], references: [id], onDelete: Cascade)
 }
 
-model UserPoints {
-  id     String   @id @default(uuid())
+model FlashCard {
+  id     String @id @default(uuid())
+  data   Json
   userId String
-  points Int
-  date   DateTime @default(now())
+
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  practiceHistory PracticeHistory[]
+}
+
+model Recall {
+  id       String @id @default(uuid())
+  noteID   String @unique
+  feedback String
+  userId   String
+  points   Int
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  note Note @relation(fields: [noteID], references: [id], onDelete: Cascade)
+}
+
+model UserXP {
+  userId String
+  points Int
+  date   DateTime @db.Date @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
 }
 
 model PracticeHistory {
-  id     String   @id @default(uuid())
-  userId String
-  date   DateTime @default(now())
-  quizId String
+  id          String   @id @default(uuid())
+  userId      String
+  date        DateTime @default(now())
+  quizId      String?
+  flashCardId String?
+  recallId    String?
+  points      Int
 
-  quiz Quiz @relation(fields: [quizId], references: [id], onDelete: Cascade)
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quiz      Quiz?      @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  flashCard FlashCard? @relation(fields: [flashCardId], references: [id], onDelete: Cascade)
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Session {

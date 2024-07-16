@@ -15,7 +15,8 @@
 	import ImageScan from '$lib/ui/ImageScan.svelte';
 	import toast from 'svelte-french-toast';
 	import type { PageData } from '../../routes/(loggedIn)/notes/new/$types';
-	import { newNoteInitialCategoryStore } from '$lib/store.svelte';
+	import { newNoteInitialCategoryStore, newQuizInitialStore } from '$lib/store.svelte';
+	import QuizItem from './QuizItem.svelte';
 
 	const carta = new Carta({
 		sanitizer: DOMPurify.sanitize
@@ -34,6 +35,8 @@
 
 	let fixingErrorsLoading = $state(false);
 
+	let quizDeleted = $state(false);
+
 	let {
 		data,
 		initialValues
@@ -44,6 +47,7 @@
 			content: string;
 			category: Category;
 			id: string;
+			quiz?: any;
 		};
 	} = $props();
 
@@ -346,6 +350,28 @@
 				<Typography variant="subtitle" class="mb-4 max-w-xl">
 					{selectedCategory.name}
 				</Typography>
+			{/if}
+
+			{#if initialValues?.quiz && !quizDeleted}
+				<QuizItem
+					quiz={initialValues.quiz}
+					deleteCallBack={() => {
+						quizDeleted = true;
+					}}
+				/>
+			{:else}
+				<Button
+					onclick={() => {
+						newQuizInitialStore.addItem({
+							id: initialValues?.id!,
+							title: initialValues?.title!
+						});
+
+						goto('/practice/quizzes/new');
+					}}
+				>
+					Make quiz
+				</Button>
 			{/if}
 		</div>
 	</div>

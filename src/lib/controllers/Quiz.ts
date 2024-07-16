@@ -1,5 +1,5 @@
 import prisma from '$lib/server/prisma';
-import type { QuizItem } from '$lib/util';
+import { MAX_TEXT_LENGTH_FOR_AI, type QuizItem } from '$lib/util';
 import { AI } from './AI';
 import { Notes } from './Notes';
 
@@ -27,6 +27,7 @@ class Quiz {
 			data: {
 				data: quizData,
 				title: quizTitle,
+				points: 0,
 				note: { connect: { id: noteID } },
 				user: { connect: { id: userID } }
 			}
@@ -53,10 +54,15 @@ class Quiz {
 
 		if (!note) throw new Error('Note not found');
 
-		if (note.content.length > 3500)
+		if (note.content.length > MAX_TEXT_LENGTH_FOR_AI)
 			throw new Error(
-				'Note too long, please shorten it to less than 3500 characters. Current length: ' +
-					note.content.length
+				'Note too long, please shorten it to less than ' +
+					MAX_TEXT_LENGTH_FOR_AI +
+					' characters. Current length: ' +
+					note.content.length +
+					' characters. (' +
+					(note.content.length - MAX_TEXT_LENGTH_FOR_AI) +
+					' characters over)'
 			);
 
 		const formattedData = await AI.cleanData(note.content);
@@ -66,7 +72,7 @@ class Quiz {
 			noteID,
 			quizData,
 			userID,
-			quizTitle: note.title
+			quizTitle: quizData.title
 		});
 
 		return quiz;
@@ -86,7 +92,8 @@ class Quiz {
 			select: {
 				note: { select: { title: true, id: true } },
 				title: true,
-				id: true
+				id: true,
+				points: true
 			}
 		});
 

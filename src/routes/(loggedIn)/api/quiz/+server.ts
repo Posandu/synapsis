@@ -32,3 +32,34 @@ export const POST = async ({ request, locals: { user } }) => {
 		} satisfies APIReturnType<string>);
 	}
 };
+
+export const DELETE = async ({ request, locals: { user } }) => {
+	const data = await request.json();
+
+	const quizID = data.id;
+
+	if (!quizID)
+		return json({
+			success: false,
+			message: 'id is required'
+		} satisfies APIReturnType<string>);
+
+	try {
+		await Quiz.deleteQuiz({
+			quizID,
+			userID: user!.id
+		});
+
+		return json({
+			success: true,
+			data: undefined
+		} satisfies APIReturnType<undefined>);
+	} catch (error) {
+		console.error(error);
+
+		return json({
+			success: false,
+			message: getErrorIfString(error, 'An error occurred while deleting the quiz')
+		} satisfies APIReturnType<string>);
+	}
+};

@@ -5,8 +5,8 @@
 	import { page } from '$app/stores';
 	import { DropdownMenu } from 'bits-ui';
 	import { scale } from 'svelte/transition';
-	import { toggleMode } from 'mode-watcher';
 	import type { Snippet } from 'svelte';
+	import { xpStore } from '$lib/store.svelte';
 
 	let { children }: { children: Snippet } = $props();
 
@@ -46,7 +46,7 @@
 </script>
 
 <div class="flex min-h-screen">
-	<div class="flex max-h-screen sticky top-0 w-[5.4rem] min-w-[5.4rem] flex-col bg-base-200">
+	<div class="sticky top-0 flex max-h-screen w-[5.4rem] min-w-[5.4rem] flex-col bg-base-200">
 		{#each menuItems as item}
 			<a
 				href={item.link}
@@ -61,6 +61,17 @@
 				<span>{item.name}</span>
 			</a>
 		{/each}
+
+		<div class="flex-1"></div>
+
+		<div
+			class="tooltip tooltip-right flex flex-col items-center justify-center gap-2 text-lg font-semibold"
+			data-tip="XP earned today"
+		>
+			<Icon icon="material-symbols:star" class="text-2xl text-yellow-400" />
+
+			<span>{xpStore.xp || 0}</span>
+		</div>
 
 		<DropdownMenu.Root bind:open={actionsMenuOpen}>
 			<DropdownMenu.Content
@@ -97,14 +108,9 @@
 		</DropdownMenu.Root>
 	</div>
 
-	<div class="mx-auto w-full max-w-6xl flex-1 lg:px-8 md:px-6 pt-12">
+	<div class="mx-auto w-full max-w-5xl flex-1 overflow-hidden pt-12 md:px-6 lg:px-8">
 		{@render children()}
+
+		<div class="h-8"></div>
 	</div>
 </div>
-
-<style global>
-	body,
-	html {
-		overflow-x: hidden;
-	}
-</style>

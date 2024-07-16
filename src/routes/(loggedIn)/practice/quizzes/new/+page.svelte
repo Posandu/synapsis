@@ -5,7 +5,8 @@
 	import Button from '$lib/ui/Button.svelte';
 	import Note from '$lib/ui/Note.svelte';
 	import Typography from '$lib/ui/Typography.svelte';
-	import { fetcher, goBack, wait } from '$lib/util';
+	import { fetcher, goBack } from '$lib/util';
+	import Icon from '@iconify/svelte';
 	import Confetti from 'svelte-confetti';
 	import toast from 'svelte-french-toast';
 	import { Stretch } from 'svelte-loading-spinners';
@@ -78,6 +79,12 @@
 		loading = false;
 		everythingDone = true;
 	};
+
+	$effect(() => {
+		return () => {
+			newQuizInitialStore.reset();
+		};
+	});
 </script>
 
 <div class="mb-4 flex w-full gap-4 align-baseline">
@@ -114,7 +121,7 @@
 			{@const promiseForThis = createQuizPromises.find((promise) => promise.noteID === note.id)}
 
 			<div class="relative">
-				<Note {note} onclick={(e) => e.preventDefault()} withLink={false}>
+				<Note {note} withLink={false}>
 					<div class="h-4"></div>
 
 					<div class="mt-auto flex gap-2">
@@ -138,6 +145,16 @@
 					</div>
 				</Note>
 
+				{#if promiseForThis?.status === 'rejected'}
+					<div
+						class="absolute inset-0 flex size-full flex-col items-center justify-center gap-2 rounded-lg border border-red-200 bg-red-100/90"
+					>
+						<Icon icon="material-symbols:error" class="text-6xl text-red-600" />
+
+						<Typography variant="h5" class="mt-2 text-red-900">Failed to create quiz</Typography>
+					</div>
+				{/if}
+
 				{#if promiseForThis?.status === 'pending'}
 					<div
 						class="absolute inset-0 grid size-full place-items-center rounded-lg border bg-white/80"
@@ -149,7 +166,7 @@
 		{/each}
 	</div>
 
-	<div class="mt-8 flex gap-2">
+	<div class="mt-4 flex gap-2">
 		{#if !everythingDone}
 			<Button
 				variant="primary"
@@ -161,19 +178,21 @@
 			>
 				Create Quiz{newQuizInitialStore.notes.length > 1 ? 'zes' : ''}
 			</Button>
-		{:else}
-			<Confetti />
+
+			<Button
+				onclick={() => {
+					goBack('/practice/quizzes');
+
+					newQuizInitialStore.reset();
+				}}
+				disabled={loading}
+			>
+				Cancel
+			</Button>
 		{/if}
 
-		<Button
-			onclick={() => {
-				goBack('/practice/quizzes');
-
-				newQuizInitialStore.reset();
-			}}
-			disabled={loading}
-		>
-			Cancel
-		</Button>
+		{#if everythingDone}
+			<Confetti />
+		{/if}
 	</div>
 {/if}

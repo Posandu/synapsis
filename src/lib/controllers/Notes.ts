@@ -94,7 +94,8 @@ class Notes {
 				}
 			},
 			include: {
-				category: true
+				category: true,
+				quiz: true
 			}
 		});
 

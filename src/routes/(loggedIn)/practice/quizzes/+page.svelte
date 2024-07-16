@@ -1,9 +1,12 @@
 <script lang="ts">
+	import { invalidate } from '$app/navigation';
 	import Button from '$lib/ui/Button.svelte';
 	import DidYouKnow from '$lib/ui/DidYouKnow.svelte';
 	import QuizItem from '$lib/ui/QuizItem.svelte';
 	import Typography from '$lib/ui/Typography.svelte';
 	import { goBack } from '$lib/util';
+	import Tutorial from '$lib/img/makeQuiz.png';
+	import BlankState from '$lib/ui/BlankState.svelte';
 
 	let { data } = $props();
 </script>
@@ -25,25 +28,45 @@
 			Random quizzes to test your knowledge. You can select notes to include in the quiz.
 		</Typography>
 	</div>
+</div>
 
-	<div class="flex items-baseline gap-2">
-		<Button variant="primary">New Quiz</Button>
+<Typography variant="h3" class="mb-2">How to create quizzes?</Typography>
+
+<div class="mb-8 flex items-center gap-8">
+	<div class="mb-6 max-w-sm text-sm opacity-80">
+		Create quizzes directly from your notes. Select multiple notes and click <span
+			class="btn btn-primary btn-xs">Make Quiz</span
+		>
+		or use the <span class="btn btn-primary btn-xs">Make Quiz</span> button on the note page.
 	</div>
+
+	<iframe
+		src="https://www.youtube.com/embed/nZ15jw3NOO8?autoplay=1&mute=1&controls=0"
+		frameborder="0"
+		allow="autoplay; encrypted-media"
+		allowfullscreen
+		title="How to create quizzes"
+		class="h-80 w-auto min-w-96 flex-1 rounded-lg border"
+	>
+	</iframe>
 </div>
 
-<Typography variant="h3" class="mb-4">How to use quizzes?</Typography>
+<Typography variant="h3" class="mb-2">Generated Quizzes</Typography>
+<Typography variant="subtitle" class="mb-8">
+	Quizzes generated from your notes will appear here.
+</Typography>
 
-<div class="mb-6 mt-4 max-w-2xl text-sm opacity-80">
-	Instead of using a seperate place to create quizzes, you can create quizzes directly from your
-	notes. To create a quiz, select the notes you want to include in the quiz and click on the "New
-	Quiz" button. You can also create a quiz from a single note by clicking on the "Create Quiz"
-	button in the note page.
-</div>
-
-<Typography variant="h3" class="mb-4">Recent Quizzes</Typography>
-
-<div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-	{#each data.quizzes as quiz}
-		<QuizItem {quiz} />
-	{/each}
-</div>
+{#if data.quizzes.length === 0}
+	<BlankState desc="Create quizzes from your notes to see them here." />
+{:else}
+	<div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+		{#each data.quizzes as quiz}
+			<QuizItem
+				{quiz}
+				deleteCallBack={() => {
+					invalidate('quiz:items');
+				}}
+			/>
+		{/each}
+	</div>
+{/if}

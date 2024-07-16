@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { invalidate } from '$app/navigation';
 	import Button from '$lib/ui/Button.svelte';
 	import Categories from '$lib/ui/Categories.svelte';
 	import Typography from '$lib/ui/Typography.svelte';
@@ -49,7 +50,11 @@
 				transitionConfig={{ duration: 200, start: 0.9 }}
 				class="fixed left-1/2 top-1/2 z-50 w-full max-w-[94%] -translate-x-1/2 -translate-y-1/2 rounded-box bg-base-100 p-5 shadow-lg outline-none sm:max-w-[490px] md:w-full"
 			>
-				<Categories />
+				<Categories
+					refreshFn={() => {
+						invalidate('notes:page');
+					}}
+				/>
 
 				<div class="mt-4 flex justify-end gap-2">
 					<Button

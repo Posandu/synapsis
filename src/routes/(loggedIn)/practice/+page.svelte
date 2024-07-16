@@ -1,4 +1,5 @@
 <script lang="ts">
+	import BlankState from '$lib/ui/BlankState.svelte';
 	import DidYouKnow from '$lib/ui/DidYouKnow.svelte';
 	import PointsPerDayChart from '$lib/ui/PointsPerDayChart.svelte';
 	import PracticedComparisonChart from '$lib/ui/PracticedComparisonChart.svelte';
@@ -69,22 +70,4 @@
 
 <Typography variant="h3" class="mb-4 mt-8">Practice History</Typography>
 
-<Typography variant="h3" class="mb-4 mt-8">Stats</Typography>
-<Typography variant="subtitle" class="mb-4 max-w-xl">
-	Here's a breakdown of how much you've practiced each note. The more you practice, the more you
-	remember - so keep practicing!
-</Typography>
-
-<div class="grid grid-cols-3 gap-4">
-	<div class="col-span-1 flex rounded-lg border p-4 shadow">
-		<PracticedComparisonChart practiced={40} notPracticed={60} />
-	</div>
-	<div class="col-span-1 flex items-center justify-center rounded-lg border p-4 shadow">
-		<PointsPerDayChart data={[10, 0, 0, 50, 2]} />
-	</div>
-	<div class="col-span-1 p-4">
-		<DidYouKnow />
-	</div>
-</div>
-
-<div class="h-10"></div>
+<BlankState desc="Practice something to see your practice history here." />

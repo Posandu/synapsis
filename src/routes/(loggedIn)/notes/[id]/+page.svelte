@@ -10,6 +10,7 @@
 		title: data.note.title,
 		content: data.note.content,
 		category: data.note.category,
-		id: data.note.id
+		id: data.note.id,
+		quiz: data.note.quiz
 	}}
 />

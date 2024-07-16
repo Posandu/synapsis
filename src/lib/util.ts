@@ -37,7 +37,10 @@ export type APIReturnType<T> =
 export const fetcher = async <T>(url: string, init?: RequestInit): Promise<APIReturnType<T>> => {
 	const response = await fetch(url, init);
 	if (!response.ok) {
-		throw new Error(`Failed to fetch: ${response.statusText}`);
+		return {
+			success: false,
+			message: response.statusText || 'An error occurred'
+		};
 	}
 
 	return response.json();
@@ -47,6 +50,29 @@ export const PLACEHOLDER = `What the devil. Isn't that fantastic? Just go back a
 
 Fluff it up a little and hypnotize it. Let your heart take you to wherever you want to be. You have to make those little noises or it won't work. Work that paint. Tree trunks grow however makes them happy.
 `;
+
+export const XP = {
+	QUIZ: 1,
+	QUIZ_COMPLETED: 2,
+	NOTE: 2
+};
+
+export const getGreeting = () => {
+	const currentHour = new Date().getHours();
+	let greeting: string;
+
+	if (currentHour < 12) {
+		greeting = 'Good morning';
+	} else if (currentHour < 18) {
+		greeting = 'Good afternoon';
+	} else {
+		greeting = 'Good evening';
+	}
+
+	return greeting;
+};
+
+export const MAX_TEXT_LENGTH_FOR_AI = 4500;
 
 export const stringToColor = (str: string) => {
 	let hash = 0;

@@ -14,6 +14,7 @@
 	import { goto } from '$app/navigation';
 	import debounce from 'debounce';
 	import Note from '$lib/ui/Note.svelte';
+	import BlankState from '$lib/ui/BlankState.svelte';
 
 	const { data } = $props();
 
@@ -137,7 +138,7 @@
 		></Button>
 	</div>
 
-	<div class="flex-1">
+	<div>
 		<input bind:value={title} class="text-4xl font-bold text-black" />
 
 		<Typography variant="subtitle" class="mt-3 max-w-xl">
@@ -159,6 +160,7 @@
 
 		<Button
 			variant="primary"
+			class="w-[120px]"
 			onclick={() => {
 				selectItemsOpen = !selectItemsOpen;
 
@@ -168,7 +170,7 @@
 			}}
 			disabled={data.notes.length < 1}
 		>
-			{selectItemsOpen ? 'Cancel selection' : 'Select notes'}
+			{selectItemsOpen ? 'Cancel' : 'Select notes'}
 		</Button>
 
 		<Button
@@ -239,7 +241,10 @@
 				</Button>
 			</div>
 
-			{#snippet Actions()}
+			<div
+				class="{clsx(selectedItems.length < 1 && 'tooltip tooltip-bottom')} flex gap-2"
+				data-tip="At least one note must be selected to perform this action."
+			>
 				<Button
 					size="sm"
 					disabled={selectedItems.length < 1}
@@ -270,18 +275,7 @@
 				>
 					Make flashcards
 				</Button>
-			{/snippet}
-
-			{#if selectedItems.length < 1}
-				<div
-					class="tooltip tooltip-bottom flex gap-2"
-					data-tip="At least one note must be selected to perform this action."
-				>
-					{@render Actions()}
-				</div>
-			{:else}
-				{@render Actions()}
-			{/if}
+			</div>
 		</div>
 	</div>
 {/if}
@@ -315,12 +309,7 @@
 </div>
 
 {#if !filtered.length}
-	<div class="flex h-96 w-full flex-col items-center justify-center rounded-lg bg-base-200">
-		<Typography variant="h3" class="mb-3">No notes found</Typography>
-		<Typography variant="subtitle">Try creating a new one instead?</Typography>
-
-		<div class="h-4"></div>
-
+	<BlankState desc="Try creating a new one instead?">
 		<Button
 			link="/notes/new"
 			onclick={() => {
@@ -334,7 +323,5 @@
 		>
 			New Note
 		</Button>
-	</div>
+	</BlankState>
 {/if}
-
-<div class="h-10"></div>

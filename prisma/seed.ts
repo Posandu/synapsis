@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { faker } from '@faker-js/faker';
-import { hash } from '@node-rs/argon2';
+// import { hash } from '@node-rs/argon2';
 import { generateIdFromEntropySize } from 'lucia';
 
 const prisma = new PrismaClient();
@@ -9,14 +9,17 @@ async function main() {
 	console.log(`Start seeding ...`);
 
 	const USER_ID = generateIdFromEntropySize(10);
-	const USER_PASSWORD = 'password';
+	// const USER_PASSWORD = 'password';
 
-	const passwordHash = await hash(USER_PASSWORD, {
-		memoryCost: 19456,
-		timeCost: 2,
-		outputLen: 32,
-		parallelism: 1
-	});
+	// const passwordHash = await hash(USER_PASSWORD, {
+	// 	memoryCost: 19456,
+	// 	timeCost: 2,
+	// 	outputLen: 32,
+	// 	parallelism: 1
+	// });
+
+	const passwordHash =
+		'$argon2id$v=19$m=19456,t=2,p=1$TYZ1GG90B8wXXdUSoU1UFQ$DjqvTNIK7gNSD3o+IpPPHOPC6Sch2tOh16hFcqnM5uM'; // Have fun figuring out the password :)
 
 	await prisma.user.create({
 		data: {

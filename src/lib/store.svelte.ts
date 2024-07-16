@@ -72,15 +72,33 @@ function createNewRecallItemStore() {
 	};
 }
 
+function createXPStore() {
+	let xp = $state<number | undefined>();
+
+	return {
+		get xp() {
+			return xp;
+		},
+		setInitial(val: number) {
+			xp = val;
+		},
+		addXP(val: number) {
+			xp = xp ? xp + val : val;
+		}
+	};
+}
+
 const newNoteInitialCategoryStore = createNewNoteInitialCategoryStore();
 
 const newQuizInitialStore = createNewQuizInitialItemsStore();
 const newFlashcardInitialStore = createNewFlashcardInitialItemsStore();
 const newRecallItemStore = createNewRecallItemStore();
+const xpStore = createXPStore();
 
 export {
 	newNoteInitialCategoryStore,
 	newQuizInitialStore,
 	newFlashcardInitialStore,
-	newRecallItemStore
+	newRecallItemStore,
+	xpStore
 };
