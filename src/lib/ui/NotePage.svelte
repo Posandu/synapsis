@@ -15,8 +15,13 @@
 	import ImageScan from '$lib/ui/ImageScan.svelte';
 	import toast from 'svelte-french-toast';
 	import type { PageData } from '../../routes/(loggedIn)/notes/new/$types';
-	import { newNoteInitialCategoryStore, newQuizInitialStore } from '$lib/store.svelte';
+	import {
+		newFlashcardInitialStore,
+		newNoteInitialCategoryStore,
+		newQuizInitialStore
+	} from '$lib/store.svelte';
 	import QuizItem from './QuizItem.svelte';
+	import FlashcardItem from './FlashcardItem.svelte';
 
 	const carta = new Carta({
 		sanitizer: DOMPurify.sanitize
@@ -36,6 +41,7 @@
 	let fixingErrorsLoading = $state(false);
 
 	let quizDeleted = $state(false);
+	let flashCardDeleted = $state(false);
 
 	let {
 		data,
@@ -48,6 +54,7 @@
 			category: Category;
 			id: string;
 			quiz?: any;
+			flashCard?: any;
 		};
 	} = $props();
 
@@ -358,6 +365,7 @@
 					deleteCallBack={() => {
 						quizDeleted = true;
 					}}
+					class="mb-2"
 				/>
 			{:else}
 				<Button
@@ -369,8 +377,33 @@
 
 						goto('/practice/quizzes/new');
 					}}
+					class="mb-2"
 				>
 					Make quiz
+				</Button>
+			{/if}
+
+			{#if initialValues?.flashCard && !quizDeleted}
+				<FlashcardItem
+					flashcard={initialValues.flashCard}
+					deleteCallBack={() => {
+						quizDeleted = true;
+					}}
+					class="mb-2"
+				/>
+			{:else}
+				<Button
+					onclick={() => {
+						newFlashcardInitialStore.addItem({
+							id: initialValues?.id!,
+							title: initialValues?.title!
+						});
+
+						goto('/practice/flashcards/new');
+					}}
+					class="mb-2"
+				>
+					Make flashcard
 				</Button>
 			{/if}
 		</div>

@@ -10,14 +10,11 @@
 		notPracticed: number;
 	} = $props();
 
-	let practicedPercentage = (practiced / (practiced + notPracticed)) * 100;
-	let notPracticedPercentage = (notPracticed / (practiced + notPracticed)) * 100;
-
 	let practicedData = {
 		labels: ['Practiced', 'Not Practiced'],
 		datasets: [
 			{
-				data: [practicedPercentage, notPracticedPercentage],
+				data: [practiced, notPracticed],
 				backgroundColor: ['#FF6384', '#36A2EB'],
 				hoverBackgroundColor: ['#FF6384', '#36A2EB']
 			}

@@ -54,10 +54,10 @@
 		<Button
 			size="sm"
 			variant="primary"
-			class="join-item flex-1"
+			class="join-item min-w-max flex-1"
 			link="/practice/flashcards/{flashcard.id}"
 		>
-			Start
+			Read Flashcards
 		</Button>
 
 		{#if flashcard.note}

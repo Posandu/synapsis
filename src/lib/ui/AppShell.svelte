@@ -14,6 +14,7 @@
 		name: string;
 		icon: string;
 		link: string;
+		realLink?: string;
 	}[] = [
 		{
 			name: 'Home',
@@ -29,6 +30,12 @@
 			name: 'Practice',
 			icon: 'clarity:bullseye-line',
 			link: '/practice'
+		},
+		{
+			name: 'Synaptica',
+			icon: 'hugeicons:bot',
+			link: '/synaptica',
+			realLink: '/practice/synaptica'
 		}
 	];
 
@@ -49,7 +56,7 @@
 	<div class="sticky top-0 flex max-h-screen w-[5.4rem] min-w-[5.4rem] flex-col bg-base-200">
 		{#each menuItems as item}
 			<a
-				href={item.link}
+				href={item.realLink || item.link}
 				class="flex flex-col items-center justify-center gap-4 py-3 text-sm transition-all {clsx(
 					active === item.link
 						? 'bg-primary text-white hover:brightness-90'

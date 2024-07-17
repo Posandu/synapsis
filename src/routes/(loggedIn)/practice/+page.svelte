@@ -1,8 +1,5 @@
 <script lang="ts">
 	import BlankState from '$lib/ui/BlankState.svelte';
-	import DidYouKnow from '$lib/ui/DidYouKnow.svelte';
-	import PointsPerDayChart from '$lib/ui/PointsPerDayChart.svelte';
-	import PracticedComparisonChart from '$lib/ui/PracticedComparisonChart.svelte';
 	import PracticeHistory from '$lib/ui/PracticeHistory.svelte';
 	import Typography from '$lib/ui/Typography.svelte';
 
@@ -11,8 +8,8 @@
 
 <Typography variant="h1" class="mb-3">Practice</Typography>
 <Typography variant="subtitle" class="mb-4 max-w-xl">
-	Recall and reinforce what you've learned. Give those brain cells a workout - practice makes
-	memories stick!
+	Recall and reinforce what you've learned. Give your brain a workout – practice makes memories
+	stick!
 </Typography>
 
 <div class="grid grid-cols-3 gap-4">
@@ -30,7 +27,7 @@
 
 		<Typography variant="h3" class="mt-2 text-purple-950">Quiz</Typography>
 		<Typography variant="subtitle" class="mt-2 text-purple-950">
-			The good ol' quiz. Test your knowledge and see how much you've learned.by taking a quiz.
+			Take a quiz and see how much you've learned. It's a classic way to test your knowledge!
 		</Typography>
 	</a>
 
@@ -48,12 +45,12 @@
 
 		<Typography variant="h3" class="mt-2 text-blue-950">Flashcards</Typography>
 		<Typography variant="subtitle" class="mt-2 text-blue-950">
-			Flashcards are a great way to memorize information. Test yourself with flashcards.
+			Flashcards are a fantastic tool for memorizing information. Test yourself with them!
 		</Typography>
 	</a>
 
 	<a
-		href="/practice/recall"
+		href="/practice/synaptica"
 		class="col-span-1 rounded-lg border border-pink-200 bg-pink-50 p-5 text-center transition-all hover:shadow-lg"
 	>
 		<img
@@ -64,9 +61,9 @@
 			alt="external-feasibility-product-management-outline-geotatah"
 		/>
 
-		<Typography variant="h3" class="mt-2 text-pink-950">Recall</Typography>
+		<Typography variant="h3" class="mt-2 text-pink-950">Synaptica</Typography>
 		<Typography variant="subtitle" class="mt-2 text-pink-950">
-			Type out what you remember from memory, and check how much you got right.
+			Our personalized AI buddy helps you practice and learn more effectively.
 		</Typography>
 	</a>
 </div>

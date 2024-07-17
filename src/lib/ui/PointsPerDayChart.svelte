@@ -20,7 +20,7 @@
 	let pointsPerDayChart = $state<HTMLCanvasElement | null>(null);
 
 	function getLast5Days(): string[] {
-		const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+		const days = ['', '', '', '', '', '', ''];
 		const today = new Date();
 		const last5Days = [];
 

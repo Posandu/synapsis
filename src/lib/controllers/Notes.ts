@@ -85,6 +85,24 @@ class Notes {
 		return note;
 	}
 
+	static async getNoteTitles({ userID, catID }: { userID: string; catID: string }) {
+		const notes = await prisma.note.findMany({
+			where: {
+				user: {
+					id: userID
+				},
+				category: {
+					id: catID
+				}
+			},
+			select: {
+				title: true
+			}
+		});
+
+		return notes;
+	}
+
 	static async find({ userID, id }: { userID: string; id: string }) {
 		const note = await prisma.note.findUnique({
 			where: {
@@ -95,7 +113,8 @@ class Notes {
 			},
 			include: {
 				category: true,
-				quiz: true
+				quiz: { select: { data: false, id: true, title: true } },
+				flashCard: { select: { data: false, id: true, title: true } }
 			}
 		});
 

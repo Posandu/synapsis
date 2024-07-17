@@ -11,6 +11,7 @@
 		content: data.note.content,
 		category: data.note.category,
 		id: data.note.id,
-		quiz: data.note.quiz
+		quiz: data.note.quiz,
+		flashCard: data.note.flashCard
 	}}
 />

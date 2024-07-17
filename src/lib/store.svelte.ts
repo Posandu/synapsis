@@ -59,22 +59,6 @@ function createNewFlashcardInitialItemsStore() {
 	};
 }
 
-function createNewRecallItemStore() {
-	let noteId = $state<string | undefined>();
-
-	return {
-		get noteId() {
-			return noteId;
-		},
-		update(val: string) {
-			noteId = val;
-		},
-		reset() {
-			noteId = undefined;
-		}
-	};
-}
-
 function createXPStore() {
 	let xp = $state<number | undefined>();
 
@@ -95,13 +79,11 @@ const newNoteInitialCategoryStore = createNewNoteInitialCategoryStore();
 
 const newQuizInitialStore = createNewQuizInitialItemsStore();
 const newFlashcardInitialStore = createNewFlashcardInitialItemsStore();
-const newRecallItemStore = createNewRecallItemStore();
 const xpStore = createXPStore();
 
 export {
 	newNoteInitialCategoryStore,
 	newQuizInitialStore,
 	newFlashcardInitialStore,
-	newRecallItemStore,
 	xpStore
 };

@@ -37,9 +37,9 @@
 <div class="mb-8 flex items-center gap-8">
 	<div class="mb-6 max-w-sm text-sm opacity-80">
 		Create flashcards directly from your notes. Select multiple notes and click <span
-			class="btn btn-primary btn-xs">Make Quiz</span
+			class="btn btn-primary btn-xs pointer-events-none">Make Flashcard</span
 		>
-		or use the <span class="btn btn-primary btn-xs">Make Quiz</span> button on the note page.
+		or use the <span class="btn btn-primary btn-xs pointer-events-none">Make Flashcard</span> button on the note page.
 	</div>
 
 	<iframe

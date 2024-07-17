@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Category } from '@prisma/client';
 	import { Stretch } from 'svelte-loading-spinners';
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import { fetcher, wait } from '$lib/util';
 	import { Popover } from 'bits-ui';
 	import { scale } from 'svelte/transition';
@@ -24,10 +24,16 @@
 
 	let {
 		selectedCategory = $bindable(null),
-		refreshFn = () => {}
+		refreshFn = () => {},
+		hideHeader = false,
+		onSelect = (category: Category) => {},
+		onLoad = () => {}
 	}: {
 		selectedCategory?: Category | null;
 		refreshFn?: () => void;
+		hideHeader?: boolean;
+		onSelect?: (category: Category) => void;
+		onLoad?: () => void;
 	} = $props();
 
 	const loadCategories = async () => {
@@ -46,6 +52,10 @@
 		categories = data.data;
 
 		loading = false;
+
+		await tick();
+
+		onLoad();
 	};
 
 	const createCategory = async () => {
@@ -76,44 +86,46 @@
 </script>
 
 <div class="flex flex-col rounded-box p-4">
-	<div class="mb-2 flex items-baseline justify-between">
-		<Typography variant="h5" class="mb-3">Categories</Typography>
+	{#if !hideHeader}
+		<div class="mb-2 flex items-baseline justify-between">
+			<Typography variant="h5" class="mb-3">Categories</Typography>
 
-		<Popover.Root
-			bind:open={createCategoryOpen}
-			closeFocus={!categoryCreateLoading}
-			closeOnOutsideClick={!categoryCreateLoading}
-		>
-			<Popover.Trigger class="btn btn-primary btn-sm" disabled={categoryCreateLoading}>
-				Create Category
-			</Popover.Trigger>
-
-			<Popover.Content
-				class="mt-2 w-72 origin-top rounded-box border bg-white p-5 shadow-lg"
-				transition={scale}
-				transitionConfig={{
-					start: 0.9,
-					opacity: 0,
-					duration: 200
-				}}
+			<Popover.Root
+				bind:open={createCategoryOpen}
+				closeFocus={!categoryCreateLoading}
+				closeOnOutsideClick={!categoryCreateLoading}
 			>
-				<Typography variant="h5" class="mb-3">Create Category</Typography>
+				<Popover.Trigger class="btn btn-primary btn-sm" disabled={categoryCreateLoading}>
+					Create Category
+				</Popover.Trigger>
 
-				<Input placeholder="Category name" class="mb-3" bind:value={categoryVal} />
-
-				<Button
-					variant="primary"
-					disabled={categoryCreateLoading}
-					loading={categoryCreateLoading}
-					onclick={() => {
-						createCategory();
+				<Popover.Content
+					class="mt-2 w-72 origin-top rounded-box border bg-white p-5 shadow-lg"
+					transition={scale}
+					transitionConfig={{
+						start: 0.9,
+						opacity: 0,
+						duration: 200
 					}}
 				>
-					Create
-				</Button>
-			</Popover.Content>
-		</Popover.Root>
-	</div>
+					<Typography variant="h5" class="mb-3">Create Category</Typography>
+
+					<Input placeholder="Category name" class="mb-3" bind:value={categoryVal} />
+
+					<Button
+						variant="primary"
+						disabled={categoryCreateLoading}
+						loading={categoryCreateLoading}
+						onclick={() => {
+							createCategory();
+						}}
+					>
+						Create
+					</Button>
+				</Popover.Content>
+			</Popover.Root>
+		</div>
+	{/if}
 
 	<Input placeholder="Search categories" class="mb-4" bind:value={searchVal} />
 
@@ -138,8 +150,13 @@
 						'rounded-btn px-4 py-2 text-left hover:bg-opacity-90',
 						selectedCategory?.id === category.id ? 'bg-primary text-white' : 'bg-base-300'
 					)}
-					onclick={() =>
-						(selectedCategory = category.id === selectedCategory?.id ? null : category)}
+					onclick={() => {
+						selectedCategory = category.id === selectedCategory?.id ? null : category;
+
+						if (!selectedCategory) return;
+
+						onSelect(category);
+					}}
 				>
 					{category.name}
 				</button>

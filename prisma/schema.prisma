@@ -20,7 +20,6 @@ model User {
   practiceHistory PracticeHistory[]
   quizzes         Quiz[]
   flashCards      FlashCard[]
-  recalls         Recall[]
 }
 
 model Category {
@@ -44,7 +43,6 @@ model Note {
   category  Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   quiz      Quiz?
-  recall    Recall?
   flashCard FlashCard?
 }
 
@@ -73,17 +71,6 @@ model FlashCard {
   note            Note              @relation(fields: [noteID], references: [id], onDelete: Cascade)
 }
 
-model Recall {
-  id       String @id @default(uuid())
-  noteID   String @unique
-  feedback String
-  userId   String
-  points   Int
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  note Note @relation(fields: [noteID], references: [id], onDelete: Cascade)
-}
-
 model UserXP {
   userId String
   points Int
@@ -100,8 +87,7 @@ model PracticeHistory {
   date        DateTime @default(now())
   quizId      String?
   flashCardId String?
-  recallId    String?
-  points      Int
+  points      Int?
 
   quiz      Quiz?      @relation(fields: [quizId], references: [id], onDelete: Cascade)
   flashCard FlashCard? @relation(fields: [flashCardId], references: [id], onDelete: Cascade)

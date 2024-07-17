@@ -8,7 +8,6 @@
 		newFlashcardInitialStore,
 		newNoteInitialCategoryStore,
 		newQuizInitialStore,
-		newRecallItemStore
 	} from '$lib/store.svelte';
 	import toast from 'svelte-french-toast';
 	import { goto } from '$app/navigation';
@@ -215,31 +214,6 @@
 			>
 				Clear
 			</Button>
-
-			<div
-				class="tooltip tooltip-bottom"
-				data-tip={selectedItems.length == 1
-					? `
-                Recall the note from memory and write it down. 
-                Then compare it with the original note to see what you missed.
-            `
-					: `
-                Only one note can be selected for recall.
-            `}
-			>
-				<Button
-					size="sm"
-					variant="primary"
-					disabled={selectedItems.length !== 1}
-					onclick={() => {
-						newRecallItemStore.update(selectedItems[0]);
-
-						goto('/practice/recall/new');
-					}}
-				>
-					Recall
-				</Button>
-			</div>
 
 			<div
 				class="{clsx(selectedItems.length < 1 && 'tooltip tooltip-bottom')} flex gap-2"

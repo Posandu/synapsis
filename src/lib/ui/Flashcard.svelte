@@ -3,12 +3,13 @@
 	import Typography from './Typography.svelte';
 	import Confetti from 'svelte-confetti';
 	import Button from './Button.svelte';
-	import { goBack } from '$lib/util';
+	import { fetcher, goBack } from '$lib/util';
 	import type { PracticeHistoryItem } from '$lib/controllers/PracticeHistory';
 	import PracticeHistory from './PracticeHistory.svelte';
 	import BlankState from './BlankState.svelte';
-	import { newQuizInitialStore } from '$lib/store.svelte';
+	import { newQuizInitialStore, xpStore } from '$lib/store.svelte';
 	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 
 	let {
 		flashcards,
@@ -45,6 +46,15 @@
 
 		if (next === flashcards.length) {
 			ended = true;
+
+			fetcher('/api/flashcard', {
+				method: 'PATCH',
+				body: JSON.stringify({
+					id: $page.params.id
+				})
+			}).then(() => {
+				xpStore.addXP(1);
+			});
 		}
 	}
 </script>

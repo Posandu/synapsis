@@ -109,7 +109,7 @@
 	<Alert type="info">
 		<span>
 			Select some notes in the <a href="/notes" class="btn btn-secondary btn-xs">notes page</a> to create
-			a flashcard.
+			flashcards.
 		</span>
 	</Alert>
 {:else}

@@ -1,11 +1,9 @@
 <script lang="ts">
 	import { invalidate } from '$app/navigation';
 	import Button from '$lib/ui/Button.svelte';
-	import DidYouKnow from '$lib/ui/DidYouKnow.svelte';
 	import QuizItem from '$lib/ui/QuizItem.svelte';
 	import Typography from '$lib/ui/Typography.svelte';
 	import { goBack } from '$lib/util';
-	import Tutorial from '$lib/img/makeQuiz.png';
 	import BlankState from '$lib/ui/BlankState.svelte';
 
 	let { data } = $props();
@@ -25,7 +23,7 @@
 		<Typography variant="h1" class="mb-2">Quizzes</Typography>
 
 		<Typography variant="subtitle" class="mt-3 max-w-xl">
-			Random quizzes to test your knowledge. You can select notes to include in the quiz.
+			Take random quizzes to test your knowledge. You can choose which notes to include in the quiz.
 		</Typography>
 	</div>
 </div>
@@ -34,10 +32,11 @@
 
 <div class="mb-8 flex items-center gap-8">
 	<div class="mb-6 max-w-sm text-sm opacity-80">
-		Create quizzes directly from your notes. Select multiple notes and click <span
-			class="btn btn-primary btn-xs">Make Quiz</span
+		Create quizzes directly from your notes. Select multiple notes and click the <span
+			class="btn btn-primary btn-xs pointer-events-none">Make Quiz</span
 		>
-		or use the <span class="btn btn-primary btn-xs">Make Quiz</span> button on the note page.
+		button, or use the <span class="btn btn-primary btn-xs pointer-events-none">Make Quiz</span> button
+		on the note page.
 	</div>
 
 	<iframe
@@ -53,7 +52,7 @@
 
 <Typography variant="h3" class="mb-2">Generated Quizzes</Typography>
 <Typography variant="subtitle" class="mb-8">
-	Quizzes generated from your notes will appear here.
+	Quizzes generated from your notes will show up here.
 </Typography>
 
 {#if data.quizzes.length === 0}

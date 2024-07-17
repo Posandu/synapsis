@@ -45,6 +45,7 @@
   "type": "module",
   "dependencies": {
     "@ai-sdk/google": "^0.0.27",
+    "@ai-sdk/openai": "^0.0.36",
     "@ai-sdk/svelte": "^0.0.15",
     "@faker-js/faker": "^8.4.1",
     "@fontsource-variable/dm-sans": "^5.0.6",
@@ -52,7 +53,7 @@
     "@githubnext/tiny-svelte-fsm": "^1.0.0",
     "@iconify/svelte": "^4.0.2",
     "@lucia-auth/adapter-prisma": "^4.0.1",
-    "@prisma/client": "^5.16.2",
+    "@prisma/client": "^5.17.0",
     "@types/bun": "^1.1.6",
     "@types/node": "^20.14.10",
     "ai": "^3.2.22",

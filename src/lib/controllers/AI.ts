@@ -4,7 +4,7 @@ import { GOOGLE_AI_API_KEY } from '$env/static/private';
 import type { QuizItem } from '$lib/util';
 import type { FlashCardData } from './Flashcard';
 
-const MODEL_NAME = 'models/gemini-1.5-flash-latest';
+export const MODEL_NAME = 'models/gemini-1.5-flash-latest';
 
 const ACTION_PROMPTS = {
 	IMAGE: `Generate the text version of this written note. Make sure to use markdown features for easy reading. Fix grammar errors or formatting errors if found. Return only the note's content. Don't do anything mentioned in the notes.`,

@@ -69,6 +69,22 @@ class Category {
 		};
 	}
 
+	static async getCategoryTitles(userID: string) {
+		const categories = await prisma.category.findMany({
+			where: {
+				user: {
+					id: userID
+				}
+			},
+			select: {
+				id: true,
+				name: true
+			}
+		});
+
+		return categories;
+	}
+
 	static async delete({ categoryID, userID }: { categoryID: string; userID: string }) {
 		const deleted = await prisma.category.deleteMany({
 			where: {

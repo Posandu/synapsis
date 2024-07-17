@@ -41,7 +41,7 @@
 
 		<div class="tooltip" data-tip="Points gained from the last attempt">
 			<span class="badge badge-neutral">
-				{quiz.points} points
+				{quiz.points || 0} points
 			</span>
 		</div>
 	</Typography>
@@ -55,8 +55,13 @@
 	{/if}
 
 	<div class="join mt-auto w-full flex-1 items-end">
-		<Button size="sm" variant="primary" class="join-item flex-1" link="/practice/quizzes/{quiz.id}">
-			Start
+		<Button
+			size="sm"
+			variant="primary"
+			class="join-item min-w-max flex-1"
+			link="/practice/quizzes/{quiz.id}"
+		>
+			Start Quiz
 		</Button>
 
 		{#if quiz.note}
@@ -64,7 +69,7 @@
 				Read Note
 			</Button>
 		{/if}
-		
+
 		<Button
 			size="sm"
 			class="btn-outline join-item flex-1"

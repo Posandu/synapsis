@@ -19,6 +19,16 @@ class PracticeHistory {
 		});
 	}
 
+	static async addFlashCard({ userID, flashCardID }: { userID: string; flashCardID: string }) {
+		return await prisma.practiceHistory.create({
+			data: {
+				points: 0,
+				flashCard: { connect: { id: flashCardID } },
+				user: { connect: { id: userID } }
+			}
+		});
+	}
+
 	static async getHistory({
 		userID,
 		quizID,
@@ -41,7 +51,16 @@ class PracticeHistory {
 						title: true
 					}
 				},
-				flashCard: true
+				flashCard: {
+					select: {
+						data: false,
+						id: true,
+						note: {
+							select: { title: true, id: true }
+						},
+						title: true
+					}
+				}
 			},
 			orderBy: { date: 'desc' },
 			take: 100

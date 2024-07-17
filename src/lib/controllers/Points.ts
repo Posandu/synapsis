@@ -52,7 +52,7 @@ class Points {
 				user: { id: userID }
 			},
 			orderBy: {
-				date: 'desc'
+				date: 'asc'
 			}
 		});
 

@@ -11,6 +11,16 @@
 	$effect(() => {
 		if (data.user) goto('/home');
 	});
+
+	const mask = (arr: number[]): [number, number, number, number, number] => {
+		const len = arr.length;
+
+		if (len < 5) {
+			return [...arr, ...new Array(5 - len).fill(0)] as [number, number, number, number, number];
+		}
+
+		return arr as [number, number, number, number, number];
+	};
 </script>
 
 <Typography variant="h2" class="mb-4">{getGreeting()}, {data.user!.username}!</Typography>
@@ -22,14 +32,17 @@
 
 <div class="grid grid-cols-3 gap-4">
 	<div class="col-span-1 flex rounded-lg border p-4 shadow">
-		<PracticedComparisonChart practiced={40} notPracticed={60} />
+		<PracticedComparisonChart
+			practiced={data.practicedCount}
+			notPracticed={data.nonPracticedCount}
+		/>
 	</div>
+
 	<div class="col-span-1 flex items-center justify-center rounded-lg border p-4 shadow">
-		<PointsPerDayChart data={[10, 0, 0, 50, 2]} />
+		<PointsPerDayChart data={mask(data.pointsHistory.map((i) => i.points))} />
 	</div>
+
 	<div class="col-span-1 p-4">
 		<DidYouKnow />
 	</div>
 </div>
-
-<div class="h-10"></div>
