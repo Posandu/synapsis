@@ -257,13 +257,13 @@
 			></Button>
 		</div>
 
-		<div class="flex-1">
-			<input
-				type="text"
-				class="mb-3 w-full text-3xl font-bold text-black"
-				placeholder="Enter the title of your note"
+		<div class="flex-1 flex flex-col">
+			<textarea
+				class="mb-3 h-max w-full min-h-0 resize-none flex-wrap text-3xl font-bold text-black"
+				placeholder="Title"
 				bind:value={$form.title}
-			/>
+				rows="1"
+			></textarea>
 
 			{#if $errors.title}
 				<Typography variant="subtitle" class="text-error">Title is required</Typography>
@@ -277,7 +277,7 @@
 		</div>
 	</div>
 
-	<div class="flex gap-8">
+	<div class="md:flex gap-8">
 		<div class="relative flex-1">
 			{#if $errors.content}
 				<Typography variant="subtitle" class="text-error">Cannot publish an empty note</Typography>
@@ -292,7 +292,7 @@
 			/>
 		</div>
 
-		<div class="w-60">
+		<div class="w-60 mt-8 md:mt-0">
 			<Typography variant="h5" class="mb-3">{initialValues ? 'Update' : 'Publish'}</Typography>
 
 			{#if !initialValues}
@@ -367,7 +367,7 @@
 					}}
 					class="mb-2"
 				/>
-			{:else}
+			{:else if initialValues}
 				<Button
 					onclick={() => {
 						newQuizInitialStore.addItem({
@@ -391,7 +391,7 @@
 					}}
 					class="mb-2"
 				/>
-			{:else}
+			{:else if initialValues}
 				<Button
 					onclick={() => {
 						newFlashcardInitialStore.addItem({
@@ -403,7 +403,7 @@
 					}}
 					class="mb-2"
 				>
-					Make flashcard
+					Make flashcards
 				</Button>
 			{/if}
 		</div>

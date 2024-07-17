@@ -1,4 +1,5 @@
 import { Points } from '$lib/controllers/Points.js';
+import { PracticeHistory } from '$lib/controllers/PracticeHistory.js';
 import prisma from '$lib/server/prisma.js';
 
 export const load = async ({ locals: { user } }) => {
@@ -35,6 +36,7 @@ export const load = async ({ locals: { user } }) => {
 	return {
 		practicedCount: practicedItems.length,
 		nonPracticedCount: nonPracticedItems.length,
-		pointsHistory
+		pointsHistory,
+		history: await PracticeHistory.getHistory({ userID: user!.id })
 	};
 };

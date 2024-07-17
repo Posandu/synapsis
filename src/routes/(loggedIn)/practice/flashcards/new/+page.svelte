@@ -130,7 +130,7 @@
 								link="/practice/flashcards/{promiseForThis.flashcardID}"
 								openLinkInNewTab
 							>
-								View Flashcard
+								View Flashcards
 							</Button>
 						{:else}
 							<Button

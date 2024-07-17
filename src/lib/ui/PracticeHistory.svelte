@@ -54,7 +54,7 @@
 				<div class="flex justify-end gap-2">
 					<Button link={`/notes/${item.flashCard.note.id}`} size="sm">View note</Button>
 					<Button link={`/practice/flashcards/${item.flashCard.id}`} size="sm">
-						View flashcard
+						View flashcards
 					</Button>
 				</div>
 			</div>

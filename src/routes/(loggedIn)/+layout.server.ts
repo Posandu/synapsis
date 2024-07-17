@@ -6,7 +6,8 @@ export const load = async ({ locals }) => {
 
 	const xp = await Points.getTodayPoints({ userID: locals.user.id });
 
-	return { xp };
+	return { xp, user: locals.user! };
 };
 
+export const prerender = false;
 export const ssr = false;

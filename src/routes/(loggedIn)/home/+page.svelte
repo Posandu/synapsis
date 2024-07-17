@@ -5,6 +5,8 @@
 	import Typography from '$lib/ui/Typography.svelte';
 	import { getGreeting } from '$lib/util.js';
 	import { goto } from '$app/navigation';
+	import BlankState from '$lib/ui/BlankState.svelte';
+	import PracticeHistory from '$lib/ui/PracticeHistory.svelte';
 
 	let { data } = $props();
 
@@ -20,7 +22,7 @@
 		}
 
 		return arr as [number, number, number, number, number];
-	};
+	}; // don't touch this
 </script>
 
 <Typography variant="h2" class="mb-4">{getGreeting()}, {data.user!.username}!</Typography>
@@ -30,13 +32,17 @@
 	remember - so keep practicing!
 </Typography>
 
-<div class="grid grid-cols-3 gap-4">
-	<div class="col-span-1 flex rounded-lg border p-4 shadow">
-		<PracticedComparisonChart
-			practiced={data.practicedCount}
-			notPracticed={data.nonPracticedCount}
-		/>
-	</div>
+<div class="grid md:grid-cols-3 gap-4">
+	{#if data.practicedCount == 0 && data.nonPracticedCount == 0}
+		<BlankState desc="You haven't practiced any notes yet!" />
+	{:else}
+		<div class="col-span-1 flex rounded-lg border p-4 shadow">
+			<PracticedComparisonChart
+				practiced={data.practicedCount}
+				notPracticed={data.nonPracticedCount}
+			/>
+		</div>
+	{/if}
 
 	<div class="col-span-1 flex items-center justify-center rounded-lg border p-4 shadow">
 		<PointsPerDayChart data={mask(data.pointsHistory.map((i) => i.points))} />
@@ -46,3 +52,11 @@
 		<DidYouKnow />
 	</div>
 </div>
+
+<Typography variant="h3" class="mb-4 mt-8">History</Typography>
+
+{#if data.history.length > 0}
+	<PracticeHistory items={data.history} />
+{:else}
+	<BlankState desc="Practice something to see your practice history here." />
+{/if}

@@ -4,6 +4,8 @@
 	import { onMount, tick } from 'svelte';
 	import toast from 'svelte-french-toast';
 	import { Diamonds } from 'svelte-loading-spinners';
+	import BlankState from './BlankState.svelte';
+	import Typography from './Typography.svelte';
 
 	let {
 		categoryID,
@@ -42,14 +44,14 @@
 <div class="flex flex-col items-center">
 	{#if loading}
 		<Diamonds />
-	{:else if data.length === 0}
-		<p class="text-gray-500">No notes found</p>
+	{:else if data.length == 0}
+		<Typography variant="h6" class="text-center">No notes found</Typography>
 	{:else}
-		<div class="w-full">
+		<div class="w-full space-y-1">
 			{#each data as note}
 				<button
-					class="w-full rounded-md p-2 text-left hover:bg-gray-100 {clsx({
-						'bg-gray-100': selected === note.id
+					class="w-full rounded-md bg-base-300 p-2 px-4 text-left {clsx({
+						'bg-primary text-white': selected === note.id
 					})}"
 					onclick={() => {
 						onSelect(note.id);

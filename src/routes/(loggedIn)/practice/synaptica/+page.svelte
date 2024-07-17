@@ -12,6 +12,7 @@
 	import Categories from '$lib/ui/Categories.svelte';
 	import toast from 'svelte-french-toast';
 	import Notes from '$lib/ui/Notes.svelte';
+	import { ripple } from 'svelte-ripple-action';
 
 	let chatContainer = $state<HTMLDivElement | null>(null);
 	let inputElement = $state<HTMLInputElement | null>(null);
@@ -71,11 +72,22 @@
 
 		await tick();
 
+		// get the last message
+		const lastMessage = messages.at(-1);
+
+		if (lastMessage && lastMessage.role == 'assistant') {
+			const lastMessageContent = lastMessage.content.at(-1)!;
+
+			if (typeof lastMessageContent !== 'string' && lastMessageContent['type'] == 'tool-call') {
+				loading = true; // prevent user from sending messages while tool is being used
+			}
+		}
+
 		inputElement?.focus();
 	};
 
 	onMount(() => {
-		//scrollToBottom();
+		scrollToBottom();
 	});
 
 	$inspect(messages);
@@ -95,8 +107,8 @@
 		<Typography variant="h1">Synaptica</Typography>
 
 		<Typography variant="subtitle" class="mt-3 max-w-xl">
-			Your personalized learning assistant! Just tell me what you need to learn, and I'll help you
-			remember it.
+			Your personalized learning assistant! Just tell me what you need to learn, and I'll help you.
+			🧠
 		</Typography>
 	</div>
 </div>
@@ -113,13 +125,14 @@
 			below and hit send!
 		</Typography>
 
-		<div class="mt-4 grid grid-cols-3 gap-4">
+		<div class="mt-4 grid gap-4 md:grid-cols-3">
 			<button
 				class="rounded-xl bg-base-200 p-4 text-center hover:bg-base-300"
 				onclick={() => {
 					input = PROMPTS.recallNotes;
 					inputElement?.focus();
 				}}
+				use:ripple
 			>
 				<p class="text-sm opacity-80">Hey! I want to recall a note</p>
 
@@ -132,6 +145,7 @@
 					input = PROMPTS.makeStudyPlan;
 					inputElement?.focus();
 				}}
+				use:ripple
 			>
 				<p class="text-sm opacity-80">
 					Hey! my exams are coming up next month, I need to make a study plan
@@ -146,6 +160,7 @@
 					input = PROMPTS.practiceNotes;
 					inputElement?.focus();
 				}}
+				use:ripple
 			>
 				<p class="text-sm opacity-80">Hey! I need to practice some notes</p>
 
@@ -206,6 +221,7 @@
 								<Typography variant="h4" class="mb-4">Select category</Typography>
 
 								<Categories
+									removePadding
 									hideHeader
 									onSelect={(cat) => {
 										if (disabledToolIDs.includes(messageItem['toolCallId'])) {

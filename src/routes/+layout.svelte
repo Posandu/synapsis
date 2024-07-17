@@ -1,20 +1,20 @@
 <script lang="ts">
 	import '@fontsource-variable/inter';
 	import '../app.css';
-	import 'svelte-ripple-action/ripple.css';
-	import 'carta-md/default.css';
+	import 'nprogress/nprogress.css';
+	import NProgress from 'nprogress';
+	import { navigating } from '$app/stores';
 	import { Toaster } from 'svelte-french-toast';
-	import AppShell from '$lib/ui/AppShell.svelte';
 
-	export let data;
+	NProgress.configure({ showSpinner: false });
+
+	$: {
+		if ($navigating) {
+			NProgress.start();
+		} else NProgress.done();
+	}
 </script>
 
 <Toaster />
 
-{#if data.user}
-	<AppShell>
-		<slot></slot>
-	</AppShell>
-{:else}
-	<slot></slot>
-{/if}
+<slot></slot>

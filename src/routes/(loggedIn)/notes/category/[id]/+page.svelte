@@ -7,7 +7,7 @@
 	import {
 		newFlashcardInitialStore,
 		newNoteInitialCategoryStore,
-		newQuizInitialStore,
+		newQuizInitialStore
 	} from '$lib/store.svelte';
 	import toast from 'svelte-french-toast';
 	import { goto } from '$app/navigation';
@@ -127,7 +127,7 @@
 	};
 </script>
 
-<div class="mb-8 flex w-full gap-4 align-baseline">
+<div class="mb-8 w-full gap-4 align-baseline md:flex">
 	<div class="flex items-baseline align-baseline">
 		<Button
 			onclick={() => {
@@ -137,15 +137,18 @@
 		></Button>
 	</div>
 
-	<div>
-		<input bind:value={title} class="text-4xl font-bold text-black" />
+	<div class="flex flex-col">
+		<textarea bind:value={title} class="flex-wrap text-4xl font-bold text-black" rows="1"
+		></textarea>
 
 		<Typography variant="subtitle" class="mt-3 max-w-xl">
 			{data.notes.length} notes in this category
 		</Typography>
 	</div>
 
-	<div class="flex items-baseline gap-2">
+	<div
+		class="mt-8 flex flex-1 flex-row-reverse items-start gap-2 overflow-hidden md:mt-0 md:flex-row md:items-baseline"
+	>
 		<Button
 			variant={deleting ? 'primary' : 'ghost'}
 			onclick={() => {
@@ -153,13 +156,14 @@
 			}}
 			disabled={deleting}
 			loading={deleting}
+			class="flex-1"
 		>
-			Delete Category
+			Delete category
 		</Button>
 
 		<Button
 			variant="primary"
-			class="w-[120px]"
+			class="flex-1 md:w-[80px]"
 			onclick={() => {
 				selectItemsOpen = !selectItemsOpen;
 
@@ -169,12 +173,13 @@
 			}}
 			disabled={data.notes.length < 1}
 		>
-			{selectItemsOpen ? 'Cancel' : 'Select notes'}
+			{selectItemsOpen ? 'Cancel' : 'Select'}
 		</Button>
 
 		<Button
 			variant="primary"
 			link="/notes/new"
+			class="flex-1"
 			onclick={() => {
 				newNoteInitialCategoryStore.update({
 					id: data.category.id,
@@ -194,7 +199,7 @@
 
 {#if selectItemsOpen}
 	<div
-		class="sticky -top-[1px] z-50 mb-4 flex items-baseline justify-between bg-base-100 py-2 {clsx(
+		class="sticky -top-[1px] z-50 mb-4 items-baseline justify-between bg-base-100 py-2 md:flex {clsx(
 			selectMenuSticky && 'border-b'
 		)}"
 		bind:this={selectMenu}
@@ -203,7 +208,9 @@
 			Selected {selectedItems.length} note{selectedItems.length > 1 ? 's' : ''}
 		</Typography>
 
-		<div class="flex items-baseline gap-2">
+		<div
+			class="mt-4 flex flex-row-reverse justify-end gap-2 md:mt-0 md:flex-row md:items-baseline md:justify-normal"
+		>
 			<Button
 				variant="ghost"
 				size="sm"

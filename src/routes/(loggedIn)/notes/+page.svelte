@@ -13,7 +13,7 @@
 	let viewCategoriesDialogOpen = $state(false);
 </script>
 
-<div class="flex w-full align-baseline">
+<div class="md:flex w-full align-baseline">
 	<div class="flex-1">
 		<Typography variant="h1" class="mb-3">Notes</Typography>
 		<Typography variant="subtitle" class="mb-4 max-w-xl">

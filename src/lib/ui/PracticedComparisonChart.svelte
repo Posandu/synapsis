@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { PieController, ArcElement, Legend, Title, Tooltip, Chart } from 'chart.js';
 	import { onMount } from 'svelte';
+	import BlankState from './BlankState.svelte';
 
 	let {
 		practiced,

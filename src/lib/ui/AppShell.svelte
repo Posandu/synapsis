@@ -7,6 +7,7 @@
 	import { scale } from 'svelte/transition';
 	import type { Snippet } from 'svelte';
 	import { xpStore } from '$lib/store.svelte';
+	import { goto } from '$app/navigation';
 
 	let { children }: { children: Snippet } = $props();
 
@@ -53,7 +54,9 @@
 </script>
 
 <div class="flex min-h-screen" data-sveltekit-preload-data="false">
-	<div class="sticky top-0 flex max-h-screen w-[5.4rem] min-w-[5.4rem] flex-col bg-base-200">
+	<div
+		class="sticky top-0 hidden max-h-screen w-[5.4rem] min-w-[5.4rem] flex-col bg-base-200 md:flex"
+	>
 		{#each menuItems as item}
 			<a
 				href={item.realLink || item.link}
@@ -94,10 +97,6 @@
 			>
 				<ul class="menu menu-md ml-2 w-56 rounded-box bg-white shadow-md">
 					<DropdownMenu.Item>
-						<li><a href="/settings">Settings</a></li>
-					</DropdownMenu.Item>
-
-					<DropdownMenu.Item>
 						<li><a href="/signout">Sign Out</a></li>
 					</DropdownMenu.Item>
 				</ul>
@@ -115,9 +114,27 @@
 		</DropdownMenu.Root>
 	</div>
 
-	<div class="mx-auto w-full max-w-5xl flex-1 overflow-hidden pt-12 md:px-6 lg:px-8">
+	<div class="mx-auto w-full max-w-5xl flex-1 px-4 overflow-hidden pt-4 md:pt-12 md:px-6 lg:px-8">
 		{@render children()}
 
-		<div class="h-8"></div>
+		<div class="h-20 md:h-8"></div>
+	</div>
+
+	<div class="btm-nav border-t md:hidden">
+		{#each menuItems as item}
+			<button
+				onclick={() => goto(item.realLink || item.link)}
+				class={clsx(
+					{
+						'active border-t-black bg-primary text-white': active === item.link
+					},
+					'transition-all'
+				)}
+				use:ripple
+			>
+				<Icon icon={item.icon} class="text-xl" />
+				<span>{item.name}</span>
+			</button>
+		{/each}
 	</div>
 </div>

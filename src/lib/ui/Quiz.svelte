@@ -25,7 +25,7 @@
 
 	let currentQuestion = $state(-1);
 	let score = $state(0);
-	let scorePercentage = $derived((score / data.questions.length) * 100);
+	let scorePercentage = $derived(Math.round((score / data.questions.length) * 100));
 	let quizCompleted = $derived(currentQuestion === -2);
 	let tracked = false;
 

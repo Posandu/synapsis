@@ -27,13 +27,15 @@
 		refreshFn = () => {},
 		hideHeader = false,
 		onSelect = (category: Category) => {},
-		onLoad = () => {}
+		onLoad = () => {},
+		removePadding = false
 	}: {
 		selectedCategory?: Category | null;
 		refreshFn?: () => void;
 		hideHeader?: boolean;
 		onSelect?: (category: Category) => void;
 		onLoad?: () => void;
+		removePadding?: boolean;
 	} = $props();
 
 	const loadCategories = async () => {
@@ -85,7 +87,7 @@
 	onMount(loadCategories);
 </script>
 
-<div class="flex flex-col rounded-box p-4">
+<div class="flex flex-col rounded-box {clsx(!removePadding && 'p-4')}">
 	{#if !hideHeader}
 		<div class="mb-2 flex items-baseline justify-between">
 			<Typography variant="h5" class="mb-3">Categories</Typography>
