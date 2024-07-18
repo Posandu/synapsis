@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "vite dev",
-    "build": "vite build",
+    "build": "prisma generate && vite build",
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
@@ -74,6 +74,7 @@
     "svelte-loading-spinners": "^0.3.6",
     "svelte-persisted-store": "^0.11.0",
     "svelte-ripple-action": "^1.0.6",
+    "sveltekit-search-params": "^2.1.2",
     "sveltekit-superforms": "^2.16.0",
     "theme-change": "^2.5.0",
     "ts-node": "^10.9.2",

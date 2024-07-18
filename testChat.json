@@ -1,0 +1,331 @@
+[
+    {
+        role: 'user',
+        content: 'Hey! I want to recall a note'
+    },
+    {
+        role: 'assistant',
+        content: [
+            {
+                type: 'text',
+                text: "Sure thing! Let's start by selecting the category and the note."
+            },
+            {
+                type: 'tool-call',
+                toolCallId: 'call_VlDvQRNVPkOweinJkyuxW7Z9',
+                toolName: 'showCategorySelect',
+                args: {
+                    title: 'Select a category'
+                }
+            }
+        ]
+    },
+    {
+        role: 'tool',
+        content: [
+            {
+                toolCallId: 'call_VlDvQRNVPkOweinJkyuxW7Z9',
+                result: {
+                    id: '9749a866-e545-4727-a8a5-3c39b9da9468',
+                    name: 'Business Studies',
+                    _count: {
+                        notes: 5
+                    }
+                },
+                toolName: 'showCategorySelect',
+                type: 'tool-result',
+                isError: false
+            }
+        ]
+    },
+    {
+        role: 'assistant',
+        content: [
+            {
+                type: 'text',
+                text: ''
+            },
+            {
+                type: 'tool-call',
+                toolCallId: 'call_rPAk7euPiK0aB7Aqv16OVBz4',
+                toolName: 'showNoteSelect',
+                args: {
+                    categoryID: '9749a866-e545-4727-a8a5-3c39b9da9468'
+                }
+            }
+        ]
+    },
+    {
+        role: 'tool',
+        content: [
+            {
+                toolCallId: 'call_rPAk7euPiK0aB7Aqv16OVBz4',
+                result: 'c6884bd9-0a40-4467-9c6b-aa79911e3968',
+                toolName: 'showNoteSelect',
+                type: 'tool-result',
+                isError: false
+            }
+        ]
+    },
+    {
+        role: 'assistant',
+        content: [
+            {
+                type: 'text',
+                text: ''
+            },
+            {
+                type: 'tool-call',
+                toolCallId: 'call_I67S2pLPDsxFPMkBQQ3J1uB1',
+                toolName: 'getNoteContent',
+                args: {
+                    noteID: 'c6884bd9-0a40-4467-9c6b-aa79911e3968'
+                }
+            }
+        ]
+    },
+    {
+        role: 'tool',
+        content: [
+            {
+                type: 'tool-result',
+                toolCallId: 'call_I67S2pLPDsxFPMkBQQ3J1uB1',
+                toolName: 'getNoteContent',
+                result:
+                    "A NEED is a good or service essential for living (food, water, shelter, education etc.). A WANT on the other hand is something we would like to have but is not essential for living (computer games, designer clothing, cars etc.). people’s wants are unlimited. The Economic Problem results from an unlimited amount of wants and a limited amount of resources to produce those goods and wants.\n\nThere are several things that cause the Economic Problem. These factors are known as Factors of Productions (resources of production) and a lack of them causes scarcity. These factors are as follows:\n\n- **Land**: This term refers to all the natural resources provided by nature and includes fields, forests, oil, gas, coal, metals and other mineral resources.\n- **Labour**: This is the efforts of the people required to produce the final product. Examples: the police, lawyers, doctors, teachers etc.\n- **Capital**: This is the finance, machinery, and equipment required to produce the goods. The 'price' of acquiring capital is referred to as interest. Examples: computers, cranes, cement mixers, coffee makers, specialist machinery for factories etc.\n- **Enterprise**: This is the skill and risk taking ability of the person who brings the other resources or factors of production together to produce the goods or provide a service. The return for enterprise is called profit. For example the owners of a business. These people are referred to as entrepreneurs.\n\nAs there are never enough of the above factors to produce all the needs and wants of people we continually face the economic problem of scarcity. When there is a lack of resources it is impossible to satisfy all our wants, therefore, we must decide which wants we wish to satisfy and which we intend to sacrifice. Those that we sacrifice automatically become known as the OPPORTUNITY COST. The OPPORTUNITY COST is the next best alternative to the good that we are buying.\n\nFactors of Production are always in limited supply therefore it is important to use these resources in the most efficient way.\n\nOver time production methods change. Machinery is now more widely used to produce goods than before, and large firms are more common than they used to be. These firms employ specialised workers for special tasks.\n"
+            }
+        ]
+    },
+    {
+        role: 'assistant',
+        content: [
+            {
+                type: 'text',
+                text: "Great! Now, please explain the note in your own words, and I'll provide feedback."
+            }
+        ]
+    },
+    {
+        role: 'user',
+        content: "I don't remember 😿"
+    },
+    {
+        role: 'assistant',
+        content: [
+            {
+                type: 'text',
+                text: 'No worries! Would you like to create a quiz or flashcards to help you remember?'
+            }
+        ]
+    },
+    {
+        role: 'user',
+        content: 'yeah please'
+    },
+    {
+        role: 'assistant',
+        content: [
+            {
+                type: 'text',
+                text: ''
+            },
+            {
+                type: 'tool-call',
+                toolCallId: 'call_O4FZVGSsA4h3qoHgc2ILmcOR',
+                toolName: 'makeQuiz',
+                args: {
+                    noteID: 'c6884bd9-0a40-4467-9c6b-aa79911e3968'
+                }
+            },
+            {
+                type: 'tool-call',
+                toolCallId: 'call_4k97SvcwMmedATCbhK6zqQcv',
+                toolName: 'makeFlashcard',
+                args: {
+                    noteID: 'c6884bd9-0a40-4467-9c6b-aa79911e3968'
+                }
+            }
+        ]
+    },
+    {
+        role: 'tool',
+        content: [
+            {
+                result: '',
+                toolCallId: 'call_O4FZVGSsA4h3qoHgc2ILmcOR',
+                toolName: 'makeQuiz',
+                type: 'tool-result'
+            },
+            {
+                result: '',
+                toolCallId: 'call_4k97SvcwMmedATCbhK6zqQcv',
+                toolName: 'makeFlashcard',
+                type: 'tool-result'
+            }
+        ]
+    },
+    {
+        role: 'user',
+        content: 'ah thank you!'
+    },
+    {
+        role: 'assistant',
+        content: [
+            {
+                type: 'text',
+                text: "You're welcome! Happy studying! If you need any more help, just let me know."
+            }
+        ]
+    },
+    {
+        role: 'user',
+        content: 'i need to study another note'
+    },
+    {
+        role: 'assistant',
+        content: [
+            {
+                type: 'text',
+                text: "Sure! Let's start by selecting the category and the note."
+            },
+            {
+                type: 'tool-call',
+                toolCallId: 'call_91Tq2S5KFrPrRnnqyv9qqpQh',
+                toolName: 'showCategorySelect',
+                args: {
+                    title: 'Select a category'
+                }
+            }
+        ]
+    },
+    {
+        role: 'tool',
+        content: [
+            {
+                toolCallId: 'call_91Tq2S5KFrPrRnnqyv9qqpQh',
+                result: {
+                    id: '9749a866-e545-4727-a8a5-3c39b9da9468',
+                    name: 'Business Studies',
+                    _count: {
+                        notes: 5
+                    }
+                },
+                toolName: 'showCategorySelect',
+                type: 'tool-result',
+                isError: false
+            }
+        ]
+    },
+    {
+        role: 'assistant',
+        content: [
+            {
+                type: 'text',
+                text: ''
+            },
+            {
+                type: 'tool-call',
+                toolCallId: 'call_16TkqsdwM1nEuv2zBSkleaHn',
+                toolName: 'showNoteSelect',
+                args: {
+                    categoryID: '9749a866-e545-4727-a8a5-3c39b9da9468'
+                }
+            }
+        ]
+    },
+    {
+        role: 'tool',
+        content: [
+            {
+                toolCallId: 'call_16TkqsdwM1nEuv2zBSkleaHn',
+                result: 'ffbbc7ea-5aca-41e4-aa78-7292792cbf2d',
+                toolName: 'showNoteSelect',
+                type: 'tool-result',
+                isError: false
+            }
+        ]
+    },
+    {
+        role: 'assistant',
+        content: [
+            {
+                type: 'text',
+                text: ''
+            },
+            {
+                type: 'tool-call',
+                toolCallId: 'call_iTU3Vzhi0dcWwh4TDI7cKgy0',
+                toolName: 'getNoteContent',
+                args: {
+                    noteID: 'ffbbc7ea-5aca-41e4-aa78-7292792cbf2d'
+                }
+            }
+        ]
+    },
+    {
+        role: 'tool',
+        content: [
+            {
+                type: 'tool-result',
+                toolCallId: 'call_iTU3Vzhi0dcWwh4TDI7cKgy0',
+                toolName: 'getNoteContent',
+                result:
+                    'A sole trader is a very common form of business organisation. It is owned and operated by a single person. The sole proprietor can employ more people if he wants. One of the main reasons it is very common is because it requires very few legal formalities. Only the following regulations must be followed:\n\n1. The name of the business is very important. In some countries it must be registered with the Registrar of Business Names. In the UK it is sufficient enough that all the business’s documents have the firm’s name on them. It is also required a notice with the name of the owner be placed at the main office.\n2. The sole trader must register with and submit an annual record of accounts to the Tax Office.\n3. In some industries it is necessary that the sole trader follow certain regulations like health and safety laws. The sole trader may also have to obtain a licence to operate a car or sell alcohol.\n\n### Advantages of a Sole Trader:\n1. Few legal formalities\n2. Complete control\n3. Freedom of how to manage business\n4. Personal contact with customers\n5. Profit motive provides incentive to work harder\n6. Secrecy where concerned with business matters\n\n### Disadvantages of a Sole Trader:\n1. There is no one to discuss business matters with\n2. The owner does not benefit from limited liability. The business is not a separate legal unit. The business’s accounts cannot be separated from the owner’s accounts. This means the owner is responsible for any of the debts the business may run into. If the owner can’t pay the money his creditors can force him or her to sell their personal property to pay their debts.\n3. There is limited capital available to expand the business. The business’s financial sources are limited to the owner’s profits, savings and small bank loans. Banks usually hesitate to give large sums of money to such small firms.\n4. Due to the size of the business the owner cannot afford to employ specialists to perform certain tasks, like managing the accounts of the business. As a result the owner may be forced to do certain things he is not skilled at.\n5. The business is likely to stay small without any capital. It will not benefit from economies of scale. Due to the small size of the business it is very hard to find good recruits; no training or opportunities can be provided for their future careers.\n6. After the death of the owner the business will cease to exist; since after the death of the owner there is no business continuity.\n'
+            }
+        ]
+    },
+    {
+        role: 'assistant',
+        content: [
+            {
+                type: 'text',
+                text: "Got it! Now, please explain the note in your own words, and I'll provide feedback."
+            }
+        ]
+    },
+    {
+        role: 'user',
+        content: 'i need to memorize it first'
+    },
+    {
+        role: 'assistant',
+        content: [
+            {
+                type: 'text',
+                text: 'Would you like to create a quiz or flashcards for this note?'
+            }
+        ]
+    },
+    {
+        role: 'user',
+        content: 'flashcards'
+    },
+    {
+        role: 'assistant',
+        content: [
+            {
+                type: 'text',
+                text: ''
+            },
+            {
+                type: 'tool-call',
+                toolCallId: 'call_z80ZvwsiL7oBBrTiV9JG3iRZ',
+                toolName: 'makeFlashcard',
+                args: {
+                    noteID: 'ffbbc7ea-5aca-41e4-aa78-7292792cbf2d'
+                }
+            }
+        ]
+    },
+    {
+        role: 'tool',
+        content: [
+            {
+                result: '',
+                toolCallId: 'call_z80ZvwsiL7oBBrTiV9JG3iRZ',
+                toolName: 'makeFlashcard',
+                type: 'tool-result'
+            }
+        ]
+    }
+]

@@ -1,47 +1,42 @@
 import { generateText, tool } from 'ai';
 import { OPENAI_API_KEY } from '$env/static/private';
 import { z } from 'zod';
-import { json } from '@sveltejs/kit';
+import { error, json } from '@sveltejs/kit';
 import type { RequestEvent } from './$types.js';
 import { createOpenAI } from '@ai-sdk/openai';
 import { Notes } from '$lib/controllers/Notes.js';
+import type { APIReturnType } from '$lib/util.js';
+import { Chat } from '$lib/controllers/Chat.js';
 
 if (!OPENAI_API_KEY) throw new Error('Missing OPENAI_API_KEY');
 
 const gen = async (request: Request, locals: RequestEvent['locals']) => {
 	const userID = locals.user!.id;
 
-	const { messages } = await request.json();
+	const { messages, chatID } = await request.json();
+
+	if (!chatID) return error(400, 'Invalid chat ID');
 
 	const result = await generateText({
 		model: createOpenAI({
 			apiKey: OPENAI_API_KEY // Let's burn some money here
-		})('gpt-4o-2024-05-13'),
+		})('gpt-4o'),
 		maxTokens: 1024,
 		messages,
 		tools: {
 			showCategorySelect: tool({
 				parameters: z.object({
-					title: z
-						.string()
-						.optional()
-						.describe(
-							'The title of the category to show the selection UI for. If not provided, show all categories.'
-						)
-				}),
-				description: 'Show the category selection UI to the user.'
+					title: z.string().optional()
+				})
 			}),
 			showNoteSelect: tool({
 				parameters: z.object({
-					categoryID: z
-						.string()
-						.describe('The ID of the category to show the note selection UI for.')
-				}),
-				description: 'Shows the note selection UI to the user.'
+					categoryID: z.string()
+				})
 			}),
 			getNoteContent: tool({
 				parameters: z.object({
-					noteID: z.string().describe('The ID of the note to retrieve the content for.')
+					noteID: z.string()
 				}),
 				description: 'Retrieve the content of the specified note.',
 				execute: async ({ noteID }) => {
@@ -52,47 +47,57 @@ const gen = async (request: Request, locals: RequestEvent['locals']) => {
 			}),
 			makeQuiz: tool({
 				parameters: z.object({
-					noteID: z.string().describe('The ID of the note to generate a quiz from.')
-				}),
-				description:
-					'An UI to generate a quiz from the specified note. Explain the user that the UI is shown to generate a quiz.'
+					noteID: z.string()
+				})
 			}),
 			makeFlashcard: tool({
 				parameters: z.object({
-					noteID: z.string().describe('The ID of the note to generate flashcards from.')
-				}),
-				description:
-					'An UI to generate flashcards from the specified note. Explain the user that the UI is shown to generate flashcards.'
+					noteID: z.string()
+				})
 			})
 		},
 		toolChoice: 'auto',
 		system: `
             
-            You're Synapsis, a friendly virtual assistant that helps students study. Keep your responses short and sweet. A category is the same as a subject or topic that the user uses to organize their notes.
-            
-            Don't be afraid to decline a request if you can't fulfill it. If you need help, ask the user for more information. If you're unsure about something, ask the user for clarification. Don't ask for technical details like IDs, the only thing that the user knows is categories and notes.
+            You're Synapsis, a friendly virtual assistant that helps students study. Keep your responses short and sweet. A category is the same as a subject or topic that the user uses to organize their notes. \n Make use of tools when asking the user for the category name and the note. \n Recall is a feture where  the user wants to explain the note in their own words, and you should provide feedback on that. DO NOT provide the original note content. 
 
-            Priortize the user's notes over the generated content. You need a category ID to get the notes from a category which can be found above. You need to show the UI when possible.
-
-            You can help the user with the following tasks:
-            - Show an UI to select a category
-            - Show an UI to select a note
-            - Generate a quiz from a note
-            - Generate flashcards from a note
-            - Explain a note thoroughly
-            - Generate a summary of a note
-            - Create study plans
-            - Help with exam preparation and revision
-            - Recall a note means that the user wants to explain the note in their own words, and you should provide feedback on that. DO NOT provide the original note content.
             `.trim(),
 		maxToolRoundtrips: 5
 	});
 
-	return result.responseMessages;
+	const messagesResp = result.responseMessages;
+
+	await Chat.updateChat({
+		chatID,
+		userID,
+		data: [...messages, ...messagesResp]
+	});
+
+	return messagesResp;
 };
 
 export type SynapTicaResponse = Awaited<ReturnType<typeof gen>>;
 
 export const POST = async ({ request, locals }) => {
+	const data = await request.clone().json(); // https://stackoverflow.com/questions/75071352/reading-the-body-of-a-request-in-hooks-server-in-sveltekit
+
+	const action = data.action;
+
+	if (action) {
+		if (action === 'startChat') {
+			const newChat = await Chat.createChat({
+				userID: locals.user!.id,
+				data: []
+			});
+
+			return json({
+				success: true,
+				data: newChat.id
+			} satisfies APIReturnType<string>);
+		}
+
+		return error(400, 'Invalid action');
+	}
+
 	return json(await gen(request, locals));
 };

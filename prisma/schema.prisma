@@ -20,6 +20,7 @@ model User {
   practiceHistory PracticeHistory[]
   quizzes         Quiz[]
   flashCards      FlashCard[]
+  chat            Chat[]
 }
 
 model Category {
@@ -98,6 +99,16 @@ model Session {
   id        String   @id
   userId    String
   expiresAt DateTime
+
+  user User @relation(references: [id], fields: [userId], onDelete: Cascade)
+}
+
+model Chat {
+  id        String   @id @default(uuid())
+  userId    String
+  data      Json
+  title     String
+  createdAt DateTime @default(now())
 
   user User @relation(references: [id], fields: [userId], onDelete: Cascade)
 }
