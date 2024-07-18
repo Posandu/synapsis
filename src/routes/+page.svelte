@@ -82,7 +82,7 @@
 
 		<div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
 			<div class="rounded-xl bg-white p-8 shadow-lg transition-all hover:shadow-xl">
-				<img src="/images/feature-1.svg" alt="" class="mx-auto mb-6 h-24 w-24" />
+				<!-- <img src="/images/feature-1.svg" alt="" class="mx-auto mb-6 h-24 w-24" /> -->
 				<h3 class="mb-4 text-2xl font-bold text-gray-900">Interactive Flashcards</h3>
 				<p class="text-gray-600">
 					Create and study with dynamic flashcards to memorize information quickly and effectively.
@@ -90,7 +90,7 @@
 			</div>
 
 			<div class="rounded-xl bg-white p-8 shadow-lg transition-all hover:shadow-xl">
-				<img src="/images/feature-2.svg" alt="" class="mx-auto mb-6 h-24 w-24" />
+				<!-- <img src="/images/feature-2.svg" alt="" class="mx-auto mb-6 h-24 w-24" /> -->
 				<h3 class="mb-4 text-2xl font-bold text-gray-900">Adaptive Quizzes</h3>
 				<p class="text-gray-600">
 					Test your knowledge with personalized quizzes that adapt to your learning progress.
@@ -98,7 +98,7 @@
 			</div>
 
 			<div class="rounded-xl bg-white p-8 shadow-lg transition-all hover:shadow-xl">
-				<img src="/images/feature-3.svg" alt="" class="mx-auto mb-6 h-24 w-24" />
+				<!-- <img src="/images/feature-3.svg" alt="" class="mx-auto mb-6 h-24 w-24" /> -->
 				<h3 class="mb-4 text-2xl font-bold text-gray-900">Gamified Learning</h3>
 				<p class="text-gray-600">
 					Earn XP, unlock achievements, and climb the leaderboard as you learn and improve.
