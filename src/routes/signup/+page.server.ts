@@ -7,7 +7,7 @@ import { message, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 
 export const load = async ({ locals }) => {
-	if (locals.user) throw redirect(302, '/');
+	if (locals.user) throw redirect(303, '/home');
 
 	const form = await superValidate(zod(createUserSchema));
 

@@ -8,7 +8,7 @@ import { verify } from '@node-rs/argon2';
 import { wait } from '$lib/util.js';
 
 export const load = async ({ locals }) => {
-	if (locals.user) throw redirect(302, '/');
+	if (locals.user) throw redirect(303, '/home');
 
 	const form = await superValidate(zod(createUserSchema));
 
