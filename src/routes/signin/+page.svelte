@@ -26,7 +26,7 @@
 <div class="relative flex min-h-svh items-center justify-center">
 	<div class="relative w-full max-w-xs text-center">
 		<div class="flex-1">
-			<img src={Logo} alt="Logo" class="mx-auto mb-8 w-36" />
+			<img src={Logo} alt="Logo" class="mx-auto mb-8 rounded-xl overflow-hidden size-24" />
 
 			<Typography variant="h2" class="mb-4">Sign In</Typography>
 			<Typography variant="subtitle" class="mb-8">

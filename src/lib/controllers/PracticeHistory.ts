@@ -63,7 +63,7 @@ class PracticeHistory {
 				}
 			},
 			orderBy: { date: 'desc' },
-			take: 100
+			take: 48
 		});
 	}
 }

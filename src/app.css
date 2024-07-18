@@ -25,3 +25,14 @@
 .carta-editor {
 	--border-color: #9ca3af4d;
 }
+
+#nprogress .bar {
+	background: #0069ff !important;
+	height: 4px;
+}
+
+#nprogress .peg {
+	box-shadow:
+		0 0 10px #0069ff,
+		0 0 5px #0069ff;
+}

@@ -2,6 +2,7 @@
 	import type { PracticeHistoryItem } from '$lib/controllers/PracticeHistory';
 	import Icon from '@iconify/svelte';
 	import Button from './Button.svelte';
+	import clsx from 'clsx';
 
 	let { items }: { items: PracticeHistoryItem[] } = $props();
 </script>
@@ -18,7 +19,12 @@
 
 				<div class="mb-2">
 					<p class="mb-1 text-sm text-gray-600">
-						Completed a <b>quiz</b> with a score of <span class="font-medium">{item.points}</span>
+						Completed a <b>quiz</b> with a score of
+						<span
+							class="font-medium {clsx(
+								(item.points ?? 0) > 75 && 'rounded-lg bg-success p-2 text-success-content'
+							)}">{item.points}</span
+						>
 					</p>
 
 					<p class="text-xs text-gray-500">
