@@ -5,7 +5,6 @@
 	import QuizItem from '$lib/ui/QuizItem.svelte';
 	import Typography from '$lib/ui/Typography.svelte';
 	import { goBack } from '$lib/util';
-	import Tutorial from '$lib/img/makeQuiz.png';
 	import BlankState from '$lib/ui/BlankState.svelte';
 	import Flashcard from '$lib/ui/Flashcard.svelte';
 	import FlashcardItem from '$lib/ui/FlashcardItem.svelte';

@@ -159,6 +159,6 @@ export function validateWrittenAnswer(userAnswer: string, correctAnswerKeywords:
 		}
 	});
 
-	const threshold = keywords.length * 0.7; // 70% match threshold
+	const threshold = keywords.length * 0.1; // 10% of the keywords
 	return score >= threshold;
 }

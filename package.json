@@ -87,6 +87,6 @@
     "zod-validation-error": "^3.3.0"
   },
   "prisma": {
-    "seed": "node --loader ts-node/esm prisma/seed.ts"
+    "seed": "bun prisma/seed.ts"
   }
 }
