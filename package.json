@@ -72,6 +72,7 @@
     "nprogress": "^0.2.0",
     "prisma": "^5.16.2",
     "runed": "^0.15.0",
+    "svelte-autosize": "^1.1.0",
     "svelte-confetti": "^2.0.1",
     "svelte-french-toast": "^1.2.0",
     "svelte-loading-spinners": "^0.3.6",

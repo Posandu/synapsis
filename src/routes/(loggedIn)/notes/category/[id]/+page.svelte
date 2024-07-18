@@ -14,6 +14,7 @@
 	import debounce from 'debounce';
 	import Note from '$lib/ui/Note.svelte';
 	import BlankState from '$lib/ui/BlankState.svelte';
+	import autosize from 'svelte-autosize';
 
 	const { data } = $props();
 
@@ -138,7 +139,11 @@
 	</div>
 
 	<div class="flex flex-col">
-		<textarea bind:value={title} class="flex-wrap text-4xl font-bold text-black" rows="1"
+		<textarea
+			bind:value={title}
+			class="flex-wrap text-4xl font-bold text-black"
+			rows="1"
+			use:autosize
 		></textarea>
 
 		<Typography variant="subtitle" class="mt-3 max-w-xl">

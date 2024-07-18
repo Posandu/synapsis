@@ -22,6 +22,7 @@
 	} from '$lib/store.svelte';
 	import QuizItem from './QuizItem.svelte';
 	import FlashcardItem from './FlashcardItem.svelte';
+	import autosize from 'svelte-autosize';
 
 	const carta = new Carta({
 		sanitizer: DOMPurify.sanitize
@@ -263,6 +264,7 @@
 				placeholder="Title"
 				bind:value={$form.title}
 				rows="1"
+				use:autosize
 			></textarea>
 
 			{#if $errors.title}
