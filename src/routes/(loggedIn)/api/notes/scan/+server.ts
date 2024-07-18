@@ -2,7 +2,7 @@ import { PLACEHOLDER, wait, type APIReturnType } from '$lib/util';
 import { AI } from '$lib/controllers/AI';
 import { json } from '@sveltejs/kit';
 
-const DEV = true;
+const DEV = false;
 
 export const POST = async ({ request }) => {
 	const formdata = await request.formData();

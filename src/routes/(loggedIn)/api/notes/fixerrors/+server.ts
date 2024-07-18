@@ -2,7 +2,7 @@ import { MAX_TEXT_LENGTH_FOR_AI, PLACEHOLDER, wait, type APIReturnType } from '$
 import { AI } from '$lib/controllers/AI';
 import { json } from '@sveltejs/kit';
 
-const DEV = true;
+const DEV = false;
 
 export const POST = async ({ request }) => {
 	const {
