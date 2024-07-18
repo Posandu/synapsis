@@ -190,7 +190,7 @@
 	</div>
 
 	<div class="flex-1">
-		<Typography variant="h1">Synaptica</Typography>
+		<Typography variant="h1">{$activeChatID ? data.chat?.title : 'Synaptica'}</Typography>
 
 		<Typography variant="subtitle" class="mt-3 max-w-xl">
 			Your personalized learning assistant! Just tell me what you need to learn, and I'll help you.

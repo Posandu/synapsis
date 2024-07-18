@@ -13,7 +13,7 @@
 	let viewCategoriesDialogOpen = $state(false);
 </script>
 
-<div class="md:flex w-full align-baseline">
+<div class="w-full align-baseline md:flex">
 	<div class="flex-1">
 		<Typography variant="h1" class="mb-3">Notes</Typography>
 		<Typography variant="subtitle" class="mb-4 max-w-xl">
@@ -73,7 +73,9 @@
 {/snippet}
 
 {#if data.categories.length == 0}
-	<BlankState />
+	<BlankState>
+		<Button variant="primary">Create a few demo notes</Button>
+	</BlankState>
 {:else}
 	<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
 		{#each data.categories as category}

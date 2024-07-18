@@ -257,9 +257,9 @@
 			></Button>
 		</div>
 
-		<div class="flex-1 flex flex-col">
+		<div class="flex flex-1 flex-col">
 			<textarea
-				class="mb-3 h-max w-full min-h-0 resize-none flex-wrap text-3xl font-bold text-black"
+				class="mb-3 h-max min-h-0 w-full resize-none flex-wrap text-3xl font-bold text-black"
 				placeholder="Title"
 				bind:value={$form.title}
 				rows="1"
@@ -277,7 +277,7 @@
 		</div>
 	</div>
 
-	<div class="md:flex gap-8">
+	<div class="gap-8 md:flex">
 		<div class="relative flex-1">
 			{#if $errors.content}
 				<Typography variant="subtitle" class="text-error">Cannot publish an empty note</Typography>
@@ -292,7 +292,7 @@
 			/>
 		</div>
 
-		<div class="w-60 mt-8 md:mt-0">
+		<div class="mt-8 w-60 md:mt-0">
 			<Typography variant="h5" class="mb-3">{initialValues ? 'Update' : 'Publish'}</Typography>
 
 			{#if !initialValues}
@@ -383,11 +383,11 @@
 				</Button>
 			{/if}
 
-			{#if initialValues?.flashCard && !quizDeleted}
+			{#if initialValues?.flashCard && !flashCardDeleted}
 				<FlashcardItem
 					flashcard={initialValues.flashCard}
 					deleteCallBack={() => {
-						quizDeleted = true;
+						flashCardDeleted = true;
 					}}
 					class="mb-2"
 				/>

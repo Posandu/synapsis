@@ -1,6 +1,7 @@
 <script lang="ts">
 	import 'svelte-ripple-action/ripple.css';
 	import 'carta-md/default.css';
+	import { pwaInfo } from 'virtual:pwa-info';
 
 	import { xpStore } from '$lib/store.svelte';
 	import { onMount } from 'svelte';
@@ -11,7 +12,13 @@
 	onMount(() => {
 		xpStore.setInitial(data.xp?.points || 0);
 	});
+
+	let webManifestLink = $derived(pwaInfo ? pwaInfo.webManifest.linkTag : '');
 </script>
+
+<svelte:head>
+	{@html webManifestLink}
+</svelte:head>
 
 <AppShell>
 	{@render children()}

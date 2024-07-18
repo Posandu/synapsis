@@ -44,7 +44,11 @@
 		await wait(500); // Wait for the UI to render
 
 		try {
-			const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+			const stream = await navigator.mediaDevices.getUserMedia({
+				video: {
+					facingMode: { exact: 'environment' } // This requests the back camera specifically
+				}
+			});
 
 			requestAnimationFrame(() => {
 				if (video) {
