@@ -115,13 +115,13 @@
 	</div>
 
 	<div class="mx-auto w-full max-w-5xl flex-1 overflow-hidden px-4 pt-0 md:px-6 md:pt-12 lg:px-8">
-		<div class="absolute flex left-0 w-full border-b px-4 py-2">
+		<div class="absolute md:hidden flex left-0 w-full border-b px-4 py-2">
 			<Icon icon="material-symbols:star" class="text-2xl text-yellow-400" />
 
 			<span class="text-black font-semibold ml-4">{xpStore.xp || 0}</span>
 		</div>
 
-		<div class="h-12"></div>
+		<div class="h-12 md:hidden"></div>
 
 		{@render children()}
 

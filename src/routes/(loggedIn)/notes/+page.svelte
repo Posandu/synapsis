@@ -4,13 +4,15 @@
 	import Button from '$lib/ui/Button.svelte';
 	import Categories from '$lib/ui/Categories.svelte';
 	import Typography from '$lib/ui/Typography.svelte';
-	import { stringToColor } from '$lib/util';
+	import { fetcher, stringToColor } from '$lib/util';
 	import { Dialog } from 'bits-ui';
 	import { fade, scale } from 'svelte/transition';
 
 	let { data } = $props();
 
 	let viewCategoriesDialogOpen = $state(false);
+
+	let demoLoading = $state(false);
 </script>
 
 <div class="w-full align-baseline md:flex">
@@ -74,7 +76,21 @@
 
 {#if data.categories.length == 0}
 	<BlankState>
-		<Button variant="primary">Create a few demo notes</Button>
+		<Button
+			variant="primary"
+			loading={demoLoading}
+			disabled={demoLoading}
+			onclick={() => {
+				demoLoading = true;
+
+				fetcher('/api/demo', {
+					method: 'POST'
+				}).then(() => {
+					demoLoading = false;
+					invalidate('notes:page');
+				});
+			}}>Create a few demo notes</Button
+		>
 	</BlankState>
 {:else}
 	<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
