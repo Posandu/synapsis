@@ -114,19 +114,27 @@
 		</DropdownMenu.Root>
 	</div>
 
-	<div class="mx-auto w-full max-w-5xl flex-1 px-4 overflow-hidden pt-4 md:pt-12 md:px-6 lg:px-8">
+	<div class="mx-auto w-full max-w-5xl flex-1 overflow-hidden px-4 pt-0 md:px-6 md:pt-12 lg:px-8">
+		<div class="absolute flex left-0 w-full border-b px-4 py-2">
+			<Icon icon="material-symbols:star" class="text-2xl text-yellow-400" />
+
+			<span class="text-black font-semibold ml-4">{xpStore.xp || 0}</span>
+		</div>
+
+		<div class="h-12"></div>
+
 		{@render children()}
 
 		<div class="h-20 md:h-8"></div>
 	</div>
 
-	<div class="btm-nav border-t md:hidden">
+	<div class="btm-nav border-t shadow md:hidden">
 		{#each menuItems as item}
 			<button
 				onclick={() => goto(item.realLink || item.link)}
 				class={clsx(
 					{
-						'active border-t-black bg-primary text-white': active === item.link
+						'bg-primary text-white': active === item.link
 					},
 					'transition-all'
 				)}

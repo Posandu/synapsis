@@ -179,57 +179,59 @@
 	$inspect(messages);
 </script>
 
-<div class="mb-8 flex w-full gap-4 align-baseline">
-	<div class="flex items-baseline align-baseline">
-		<Button
-			onclick={() => {
-				goBack('/practice/');
-			}}
-			icon="mdi:arrow-left"
-		></Button>
+{#if !$activeChatID}
+	<div class="mb-8 w-full gap-4 align-baseline md:flex">
+		<div class="flex items-baseline align-baseline">
+			<Button
+				onclick={() => {
+					goBack('/practice/');
+				}}
+				icon="mdi:arrow-left"
+			></Button>
+		</div>
+
+		<div class="flex-1 pt-4 md:pt-0">
+			<Typography variant="h1">{$activeChatID ? data.chat?.title : 'Synaptica'}</Typography>
+
+			<Typography variant="subtitle" class="mt-3 max-w-xl">
+				Your personalized learning assistant! Just tell me what you need to learn, and I'll help
+				you. 🧠
+			</Typography>
+		</div>
+
+		<div class="mt-4 flex items-baseline md:mt-0 md:justify-end">
+			<Button
+				variant="primary"
+				disabled={startChatLoading}
+				loading={startChatLoading}
+				onclick={async () => {
+					startChatLoading = true;
+
+					const resp = await fetcher<string>('/practice/synaptica', {
+						method: 'POST',
+						body: JSON.stringify({
+							action: 'startChat'
+						})
+					});
+
+					if (resp.success) {
+						$activeChatID = resp.data;
+					} else {
+						toast.error('Failed to start chat');
+					}
+
+					startChatLoading = false;
+				}}
+			>
+				Start a chat
+			</Button>
+		</div>
 	</div>
-
-	<div class="flex-1">
-		<Typography variant="h1">{$activeChatID ? data.chat?.title : 'Synaptica'}</Typography>
-
-		<Typography variant="subtitle" class="mt-3 max-w-xl">
-			Your personalized learning assistant! Just tell me what you need to learn, and I'll help you.
-			🧠
-		</Typography>
-	</div>
-
-	<div class="flex items-baseline justify-end">
-		<Button
-			variant="primary"
-			disabled={startChatLoading}
-			loading={startChatLoading}
-			onclick={async () => {
-				startChatLoading = true;
-
-				const resp = await fetcher<string>('/practice/synaptica', {
-					method: 'POST',
-					body: JSON.stringify({
-						action: 'startChat'
-					})
-				});
-
-				if (resp.success) {
-					$activeChatID = resp.data;
-				} else {
-					toast.error('Failed to start chat');
-				}
-
-				startChatLoading = false;
-			}}
-		>
-			Start a chat
-		</Button>
-	</div>
-</div>
+{/if}
 
 {#if $activeChatID}
 	<div
-		class="mx-auto flex max-h-[calc(100vh-300px)] min-h-[calc(100vh-300px)] w-full flex-col gap-4 overflow-auto rounded-t-xl border bg-base-200/20 p-4"
+		class="mx-auto flex max-h-[calc(100vh-170px)] min-h-[calc(100vh-170px)] w-full flex-col gap-4 overflow-auto rounded-t-xl md:border bg-base-200/20 p-4"
 		bind:this={chatContainer}
 	>
 		<div class="mx-auto mt-4 max-w-3xl text-center">

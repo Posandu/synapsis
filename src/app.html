@@ -8,10 +8,9 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1" />
 		<title>Synapsis</title>
 		<meta name="description" content="AI learning platform" />
-		<link rel="apple-touch-icon" href="/apple-touch-icon-180x180.png" sizes="180x180" />
-		<link rel="mask-icon" href="/maskable-icon-512x512.png" color="#FFFFFF" />
 		<meta name="theme-color" content="#ffffff" />
 		<link rel="icon" href="/favicon.ico" sizes="any" />
+		<link rel="icon" href="/logo.svg" type="image/svg+xml" />
 		<link rel="apple-touch-icon" href="/apple-touch-icon-180x180.png" />
 
 		%sveltekit.head%
@@ -29,11 +28,15 @@
 				align-items: center;
 				z-index: 1000;
 			}
+
+			#loading img {
+				border-radius: 10px;
+			}
 		</style>
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div id="loading">
-			<img src="%sveltekit.assets%/logo.png" alt="Synapsis" width="50" />
+			<img src="%sveltekit.assets%/logo.svg" alt="Synapsis" width="50" />
 		</div>
 
 		<div style="display: contents">%sveltekit.body%</div>
