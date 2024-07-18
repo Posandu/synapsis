@@ -5,6 +5,7 @@
 	import NProgress from 'nprogress';
 	import { navigating } from '$app/stores';
 	import { Toaster } from 'svelte-french-toast';
+	import { onMount } from 'svelte';
 
 	NProgress.configure({ showSpinner: false });
 
@@ -13,6 +14,14 @@
 			NProgress.start();
 		} else NProgress.done();
 	}
+
+	onMount(() => {
+		const el = document.querySelector('#loading');
+
+		setTimeout(() => {
+			el?.remove();
+		}, 500);
+	});
 </script>
 
 <Toaster />
