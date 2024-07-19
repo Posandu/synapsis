@@ -2,7 +2,7 @@
 	import '@fontsource-variable/inter';
 	import '../app.css';
 	import 'nprogress/nprogress.css';
-	import NProgress from 'nprogress';
+	import NProgress, { set } from 'nprogress';
 	import { navigating } from '$app/stores';
 	import { Toaster } from 'svelte-french-toast';
 	import { onMount } from 'svelte';
@@ -16,11 +16,16 @@
 	}
 
 	onMount(() => {
+		// @ts-ignore
+		const START = window!.START;
+
 		const el = document.querySelector('#loading');
+
+		const delay = Math.max(500, START + 500 - Date.now());
 
 		setTimeout(() => {
 			el?.remove();
-		}, 500);
+		}, delay);
 	});
 </script>
 

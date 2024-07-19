@@ -15,7 +15,7 @@ export const load = async () => {
 		},
 		where: {
 			date: {
-				gte: new Date(new Date().toDateString()) // today
+				gte: new Date(new Date().toDateString())
 			}
 		},
 		take: 10

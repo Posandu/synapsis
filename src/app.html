@@ -2,58 +2,118 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<link rel="icon" href="%sveltekit.assets%/favicon.ico" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Synapsis - AI Learning Platform</title>
+		<meta
+			name="description"
+			content="Synapsis: Revolutionize your learning with AI-powered education"
+		/>
+		<meta name="theme-color" content="#0069ff" />
 
-		<meta name="viewport" content="width=device-width,initial-scale=1" />
-		<title>Synapsis</title>
-		<meta name="description" content="AI learning platform" />
-		<meta name="theme-color" content="#ffffff" />
 		<link rel="icon" href="/favicon.ico" sizes="any" />
 		<link rel="icon" href="/logo.svg" type="image/svg+xml" />
 		<link rel="apple-touch-icon" href="/apple-touch-icon-180x180.png" />
 
 		%sveltekit.head%
 
+		<script>
+			window.START = Date.now();
+		</script>
+
 		<style>
-			#loading {
-				position: fixed;
-				top: 0;
-				left: 0;
-				width: 100%;
-				height: 100%;
-				background: white;
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				z-index: 1000;
-				font-family: sans-serif;
-				font-size: 14px;
-				flex-direction: column;
-				gap: 1em;
+			#loading svg {
+				border-radius: 10px;
 			}
 
-			#loading img {
-				border-radius: 10px;
+			@keyframes fadeIn {
+				from {
+					opacity: 0;
+				}
+				to {
+					opacity: 1;
+				}
+			}
+
+			#loading {
+				position: fixed;
+				inset: 0;
+				z-index: 1000;
+				width: 100vw;
+				height: 100vh;
+				background: linear-gradient(135deg, #ffffff, #f0f4ff);
+				display: grid;
+				place-items: center;
+				font-size: 16px;
+				gap: 10px;
+			}
+
+			#loading p {
+				animation: fadeIn 1s ease-out;
+				color: #333;
+			}
+
+			.error-message {
+				text-align: center;
+				color: #d32f2f;
+				max-width: 80%;
+			}
+
+			.error-message h2 {
+				font-size: 1.2em;
+				margin-top: 1em;
 			}
 		</style>
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div id="loading">
-			<img src="%sveltekit.assets%/logo.svg" alt="Synapsis" width="50" />
-
-			<p>Loading</p>
+			<svg
+				version="1.2"
+				xmlns="http://www.w3.org/2000/svg"
+				viewBox="0 0 200 200"
+				width="60"
+				height="60"
+			>
+				<style>
+					.a {
+						fill: #0069ff;
+					}
+					.b {
+						fill: #fff;
+					}
+				</style>
+				<path class="a" d="m200 0v200h-200v-200z" />
+				<path
+					class="b"
+					d="m101.7 155.3q-14.3 0-24.9-4.2-10.5-4.2-16.4-13-5.8-8.8-5.9-22.5h28.1q0.3 5 2.5 8.4 2.3 3.5 6.3 5.2 4.1 1.8 9.8 1.8 4.8 0 8-1.2 3.2-1.1 4.8-3.2 1.7-2.1 1.7-4.8 0-2.5-1.6-4.3-1.5-2-5.1-3.5-3.6-1.5-9.7-2.8l-11-2.3q-14.4-3.1-22.8-10.5-8.2-7.5-8.2-20.3 0-10.4 5.6-18.1 5.7-7.9 15.5-12.2 10-4.4 23-4.4 13.2 0 22.8 4.5 9.7 4.4 14.9 12.4 5.3 8 5.3 18.7h-28.4q-0.4-5.3-3.9-8.3-3.6-3-10.7-3-4.6 0-7.5 1.1-2.9 1-4.3 2.9-1.4 2-1.4 4.4 0 2.5 1.4 4.5 1.6 1.9 4.8 3.4 3.3 1.4 8.4 2.5l9 1.9q9 1.9 15.4 5 6.5 3.2 10.6 7.4 4.2 4.2 6.1 9.5 2 5.2 2 11.5 0 10.7-5.4 18.3-5.2 7.5-15.1 11.3-9.9 3.9-23.7 3.9z"
+				/>
+			</svg>
 		</div>
 
 		<script>
-			const TIMEOUT = 25000;
+			const TIMEOUT = 20000;
 			const loading = document.getElementById('loading');
 
-			const timeout = setTimeout(() => {
-				if (!loading) return;
+			let error = false;
 
-				loading.innerHTML =
-					'Loading is taking longer than expected. Please check your internet connection and try again.';
+			window.addEventListener('error', (e) => {
+				error = true;
+				if (loading) {
+					loading.innerHTML = `
+                    <div class="error-message">
+                        <p>${e.message}</p>
+                        <h2>A critical error occurred. Please refresh the page and try again.</h2>
+                    </div>`;
+				}
+			});
+
+			const timeout = setTimeout(() => {
+				if (!loading || error) return;
+
+				loading.innerHTML = `
+                <div class="error-message">
+                    <p>Loading is taking longer than expected.</p>
+                    <h2>Please check your internet connection and try again.</h2>
+                </div>`;
 			}, TIMEOUT);
 		</script>
 
