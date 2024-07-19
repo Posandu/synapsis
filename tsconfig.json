@@ -10,9 +10,8 @@
 		"sourceMap": true,
 		"strict": true,
 		"moduleResolution": "bundler",
-		"types": ["vite-plugin-pwa/info"]
-	},
-	"include": "./svelte-autosize.d.ts"
+		"types": ["vite-plugin-pwa/info", "./svelte-autosize.d.ts"]
+	}
 	// Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
 	// except $lib which is handled by https://kit.svelte.dev/docs/configuration#files
 	//

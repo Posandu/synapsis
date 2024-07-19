@@ -13,7 +13,8 @@ export const lucia = new Lucia(adapter, {
 	},
 	getUserAttributes: (attributes) => {
 		return {
-			username: attributes.username
+			username: attributes.username,
+			lastOverviewGiven: attributes.lastOverviewGiven
 		};
 	}
 });
@@ -27,4 +28,5 @@ declare module 'lucia' {
 
 interface DatabaseUserAttributes {
 	username: string;
+	lastOverviewGiven?: Date;
 }

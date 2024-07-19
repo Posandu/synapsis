@@ -36,7 +36,7 @@
 		type?: 'button' | 'submit' | 'reset';
 		children?: Snippet;
 		openLinkInNewTab?: boolean;
-		onclick?: () => void;
+		onclick?: (e?: MouseEvent) => void;
 	} = $props();
 
 	let dynamicProps = $derived.by(() => {

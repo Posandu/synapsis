@@ -6,7 +6,7 @@
 	import type { SynapTicaResponse } from './+server';
 	import MdRender from '$lib/ui/MDRender.svelte';
 	import { newFlashcardInitialStore, newQuizInitialStore } from '$lib/store.svelte';
-	import { goto } from '$app/navigation';
+	import { goto, invalidate } from '$app/navigation';
 	import { onMount, tick } from 'svelte';
 	import { Diamonds } from 'svelte-loading-spinners';
 	import Categories from '$lib/ui/Categories.svelte';
@@ -15,6 +15,7 @@
 	import { ripple } from 'svelte-ripple-action';
 	import { queryParam } from 'sveltekit-search-params';
 	import BlankState from '$lib/ui/BlankState.svelte';
+	import clsx from 'clsx';
 
 	let chatContainer = $state<HTMLDivElement | null>(null);
 	let inputElement = $state<HTMLInputElement | null>(null);
@@ -163,7 +164,11 @@
 
 		const data: SynapTicaResponse = await response.json();
 
-		messages = [...messages, ...data];
+		if (!data || typeof data[Symbol.iterator] !== 'function') {
+			toast.error('Failed to process response');
+		} else {
+			messages = [...messages, ...data];
+		}
 
 		loading = false;
 
@@ -174,6 +179,10 @@
 
 	onMount(() => {
 		scrollToBottom();
+	});
+
+	$effect(() => {
+		if ($activeChatID) invalidate('chat:data');
 	});
 
 	$inspect(messages);
@@ -231,7 +240,7 @@
 
 {#if $activeChatID}
 	<div
-		class="mx-auto flex max-h-[calc(100vh-170px)] min-h-[calc(100vh-170px)] w-full flex-col gap-4 overflow-auto rounded-t-xl md:border bg-base-200/20 p-4"
+		class="mx-auto flex max-h-[calc(100vh-170px)] min-h-[calc(100vh-170px)] w-full flex-col gap-4 overflow-auto rounded-t-xl bg-base-200/20 p-4 md:border"
 		bind:this={chatContainer}
 	>
 		<div class="mx-auto mt-4 max-w-3xl text-center">
@@ -433,6 +442,7 @@
 			placeholder="Type your message here"
 			bind:this={inputElement}
 		/>
+
 		<button type="submit" class="btn btn-primary join-item" disabled={loading}>Send</button>
 	</form>
 {:else if data.chats.length === 0}
@@ -440,12 +450,39 @@
 {:else}
 	<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
 		{#each data.chats as chat}
-			<a href="?c={chat.id}" class="rounded-xl border p-5 shadow transition-all hover:shadow-lg">
-				<Typography variant="h4" class="font-medium">{chat.title}</Typography>
+			<a
+				href="?c={chat.id}"
+				class="rounded-xl border p-5 shadow transition-all hover:shadow-lg {clsx(
+					!chat.read && 'ring ring-primary/20'
+				)}"
+			>
+				<Typography variant="h4" class="font-medium {clsx(
+					!chat.read && 'text-primary'
+				)}">{chat.title}</Typography>
 
 				<Typography variant="subtitle" class="mt-2">{chat.createdAt.toLocaleString()}</Typography>
 
-				<Button variant="danger" class="mt-4 block w-full">Delete</Button>
+				<Button
+					variant="danger"
+					class="mt-4 block w-full"
+					onclick={(e) => {
+						e?.preventDefault();
+
+						if (!confirm('Are you sure you want to delete this chat?')) return;
+
+						fetch(`/practice/synaptica`, {
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json'
+							},
+							body: JSON.stringify({ action: 'deleteChat', chatID: chat.id })
+						}).then(() => {
+							invalidate('chat:data');
+						});
+					}}
+				>
+					Delete
+				</Button>
 			</a>
 		{/each}
 	</div>

@@ -1,19 +1,24 @@
-import { generateText, tool } from 'ai';
+import { generateText, tool, type CoreMessage } from 'ai';
 import { OPENAI_API_KEY } from '$env/static/private';
 import { z } from 'zod';
 import { error, json } from '@sveltejs/kit';
-import type { RequestEvent } from './$types.js';
 import { createOpenAI } from '@ai-sdk/openai';
 import { Notes } from '$lib/controllers/Notes.js';
 import type { APIReturnType } from '$lib/util.js';
 import { Chat } from '$lib/controllers/Chat.js';
+import { Points } from '$lib/controllers/Points.js';
+import { ACTION_PROMPTS } from '$lib/controllers/AI.js';
 
 if (!OPENAI_API_KEY) throw new Error('Missing OPENAI_API_KEY');
 
-const gen = async (request: Request, locals: RequestEvent['locals']) => {
-	const userID = locals.user!.id;
-
-	const { messages, chatID } = await request.json();
+export const _gen = async (
+	json: {
+		messages: CoreMessage[];
+		chatID?: string;
+	},
+	userID: string
+) => {
+	const { messages, chatID } = json;
 
 	if (!chatID) return error(400, 'Invalid chat ID');
 
@@ -42,7 +47,26 @@ const gen = async (request: Request, locals: RequestEvent['locals']) => {
 				execute: async ({ noteID }) => {
 					const note = await Notes.find({ id: noteID, userID });
 
-					return note!.content;
+					return {
+						title: note!.title,
+						content: note!.content
+					};
+				}
+			}),
+			checkQuizMarks: tool({
+				parameters: z.object({
+					noteID: z.string()
+				}),
+				execute: async ({ noteID }) => {
+					const note = await Notes.find({ id: noteID, userID });
+
+					if (!note?.quiz) return 'No quiz found for this note.';
+
+					const quiz = note.quiz;
+
+					if (quiz.points === 0) return "Created a quiz but haven't attempted it yet.";
+
+					return `Scored ${quiz.points}/100 in the quiz.`;
 				}
 			}),
 			makeQuiz: tool({
@@ -54,14 +78,22 @@ const gen = async (request: Request, locals: RequestEvent['locals']) => {
 				parameters: z.object({
 					noteID: z.string()
 				})
+			}),
+			addPoints: tool({
+				parameters: z.object({
+					points: z.number()
+				}),
+				execute: async ({ points }) => {
+					points = Math.min(points, 2); // Cap points to 2
+
+					Points.addPointsPerDay({ userID, points });
+
+					return `You earned ${points} points! Keep up the good work!`;
+				}
 			})
 		},
 		toolChoice: 'auto',
-		system: `
-            
-            You're Synapsis, a friendly virtual assistant that helps students study. Keep your responses short and sweet. A category is the same as a subject or topic that the user uses to organize their notes. \n Make use of tools when asking the user for the category name and the note. \n Recall is a feture where  the user wants to explain the note in their own words, and you should provide feedback on that. DO NOT provide the original note content. 
-
-            `.trim(),
+		system: ACTION_PROMPTS.SYNAPTICA,
 		maxToolRoundtrips: 5
 	});
 
@@ -76,10 +108,10 @@ const gen = async (request: Request, locals: RequestEvent['locals']) => {
 	return messagesResp;
 };
 
-export type SynapTicaResponse = Awaited<ReturnType<typeof gen>>;
+export type SynapTicaResponse = Awaited<ReturnType<typeof _gen>>;
 
 export const POST = async ({ request, locals }) => {
-	const data = await request.clone().json(); // https://stackoverflow.com/questions/75071352/reading-the-body-of-a-request-in-hooks-server-in-sveltekit
+	const data = await request.json(); // https://stackoverflow.com/questions/75071352/reading-the-body-of-a-request-in-hooks-server-in-sveltekit
 
 	const action = data.action;
 
@@ -96,8 +128,21 @@ export const POST = async ({ request, locals }) => {
 			} satisfies APIReturnType<string>);
 		}
 
+		if (action === 'deleteChat') {
+			const { chatID } = data;
+
+			await Chat.deleteChat({
+				chatID,
+				userID: locals.user!.id
+			});
+
+			return json({
+				success: true
+			});
+		}
+
 		return error(400, 'Invalid action');
 	}
 
-	return json(await gen(request, locals));
+	return json(await _gen(data, locals.user!.id));
 };

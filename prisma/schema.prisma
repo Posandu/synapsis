@@ -8,10 +8,11 @@ datasource db {
 }
 
 model User {
-  id            String   @id
-  username      String   @unique
-  password_hash String
-  createdAt     DateTime @default(now())
+  id                String    @id
+  username          String    @unique
+  password_hash     String
+  createdAt         DateTime  @default(now())
+  lastOverviewGiven DateTime?
 
   sessions        Session[]
   notes           Note[]
@@ -109,6 +110,7 @@ model Chat {
   data      Json
   title     String
   createdAt DateTime @default(now())
+  read      Boolean  @default(false)
 
   user User @relation(references: [id], fields: [userId], onDelete: Cascade)
 }

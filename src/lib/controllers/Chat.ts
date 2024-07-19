@@ -35,7 +35,8 @@ class Chat {
 			select: {
 				id: true,
 				createdAt: true,
-				title: true
+				title: true,
+				read: true
 			},
 			orderBy: {
 				createdAt: 'desc'
@@ -46,12 +47,14 @@ class Chat {
 	static async updateChat({
 		chatID,
 		userID,
-		data
+		data,
+		read
 	}: {
 		chatID: string;
 		userID: string;
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		data: any;
+		read?: boolean;
 	}) {
 		return await prisma.chat.update({
 			where: {
@@ -59,7 +62,17 @@ class Chat {
 				user: { id: userID }
 			},
 			data: {
-				data
+				data,
+				read: read
+			}
+		});
+	}
+
+	static async getUnreadChatCount({ userID }: { userID: string }) {
+		return await prisma.chat.count({
+			where: {
+				user: { id: userID },
+				read: false
 			}
 		});
 	}

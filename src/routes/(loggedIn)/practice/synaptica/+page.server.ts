@@ -2,7 +2,9 @@ import { Chat as ChatController } from '$lib/controllers/Chat';
 import type { Chat } from '@prisma/client';
 import { error } from '@sveltejs/kit';
 
-export const load = async ({ locals: { user }, url }) => {
+export const load = async ({ locals: { user }, url, depends }) => {
+	depends('chat:data');
+
 	const params = url.searchParams;
 
 	const outData: {
@@ -23,6 +25,15 @@ export const load = async ({ locals: { user }, url }) => {
 		}
 
 		outData.chat = chat;
+
+		if (!chat.read) {
+			await ChatController.updateChat({
+				userID: user!.id,
+				chatID: chat.id,
+				data: chat.data,
+				read: true
+			});
+		}
 	}
 
 	return outData;

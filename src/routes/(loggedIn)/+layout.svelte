@@ -20,6 +20,6 @@
 	{@html webManifestLink}
 </svelte:head>
 
-<AppShell>
+<AppShell unreadChatCount={data.unreadChatCount}>
 	{@render children()}
 </AppShell>

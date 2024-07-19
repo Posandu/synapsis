@@ -9,7 +9,7 @@
 	import { xpStore } from '$lib/store.svelte';
 	import { goto } from '$app/navigation';
 
-	let { children }: { children: Snippet } = $props();
+	let { children, unreadChatCount }: { children: Snippet; unreadChatCount: number } = $props();
 
 	const menuItems: {
 		name: string;
@@ -69,19 +69,28 @@
 			>
 				<Icon icon={item.icon} class="text-2xl" />
 				<span>{item.name}</span>
+
+				{#if unreadChatCount > 0 && item.realLink === '/practice/synaptica'}
+					<div
+						class="absolute right-2 top-2 inline-flex size-6 items-center justify-center rounded-full bg-red-600 text-xs font-semibold text-white"
+					>
+						{unreadChatCount}
+					</div>
+				{/if}
 			</a>
 		{/each}
 
 		<div class="flex-1"></div>
 
-		<div
+		<a
 			class="tooltip tooltip-right flex flex-col items-center justify-center gap-2 text-lg font-semibold"
 			data-tip="XP earned today"
+			href="/leaderboard"
 		>
 			<Icon icon="material-symbols:star" class="text-2xl text-yellow-400" />
 
 			<span>{xpStore.xp || 0}</span>
-		</div>
+		</a>
 
 		<DropdownMenu.Root bind:open={actionsMenuOpen}>
 			<DropdownMenu.Content
@@ -115,11 +124,15 @@
 	</div>
 
 	<div class="mx-auto w-full max-w-5xl flex-1 overflow-hidden px-4 pt-0 md:px-6 md:pt-12 lg:px-8">
-		<div class="absolute md:hidden flex left-0 w-full border-b px-4 py-2">
+		<a class="absolute left-0 flex w-full border-b px-4 py-2 md:hidden" href="/leaderboard">
 			<Icon icon="material-symbols:star" class="text-2xl text-yellow-400" />
 
-			<span class="text-black font-semibold ml-4">{xpStore.xp || 0}</span>
-		</div>
+			<span class="ml-4 font-semibold text-black">{xpStore.xp || 0}</span>
+
+			<div class="flex-1"></div>
+
+			<Icon icon="akar-icons:chevron-right" class="text-xl text-black/60" />
+		</a>
 
 		<div class="h-12 md:hidden"></div>
 
@@ -142,6 +155,14 @@
 			>
 				<Icon icon={item.icon} class="text-xl" />
 				<span>{item.name}</span>
+
+				{#if unreadChatCount > 0 && item.realLink === '/practice/synaptica'}
+					<div
+						class="absolute right-2 top-2 inline-flex size-6 items-center justify-center rounded-full bg-red-600 text-xs font-semibold text-white"
+					>
+						{unreadChatCount}
+					</div>
+				{/if}
 			</button>
 		{/each}
 	</div>

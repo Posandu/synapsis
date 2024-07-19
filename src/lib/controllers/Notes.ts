@@ -113,7 +113,7 @@ class Notes {
 			},
 			include: {
 				category: true,
-				quiz: { select: { data: false, id: true, title: true } },
+				quiz: { select: { data: false, id: true, title: true, points: true } },
 				flashCard: { select: { data: false, id: true, title: true } }
 			}
 		});
