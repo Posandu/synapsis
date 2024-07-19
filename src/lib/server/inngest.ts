@@ -12,7 +12,8 @@ const sendMsg = inngest.createFunction(
 		id: 'sendDailyMessage',
 		rateLimit: {
 			limit: 1,
-			period: '1d'
+			period: '1d',
+			key: 'event.data.userID'
 		}
 	},
 	{ event: 'app/sendDailyMessage' },

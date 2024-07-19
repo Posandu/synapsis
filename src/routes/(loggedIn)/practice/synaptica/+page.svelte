@@ -41,7 +41,12 @@
 
 	$effect(() => {
 		if ($activeChatID && data.chat) {
+			loading = false;
+			input = '';
+			startChatLoading = false;
+
 			console.log(data.chat.data);
+
 			if (data.chat.data) {
 				messages = data.chat.data as any;
 			}
@@ -173,6 +178,8 @@
 		loading = false;
 
 		await tick();
+
+		scrollToBottom();
 
 		inputElement?.focus();
 	};
