@@ -20,7 +20,7 @@ const gen = async (request: Request, locals: RequestEvent['locals']) => {
 	const result = await generateText({
 		model: createOpenAI({
 			apiKey: OPENAI_API_KEY // Let's burn some money here
-		})('gpt-4o'),
+		})('gpt-4o-mini'),
 		maxTokens: 1024,
 		messages,
 		tools: {
