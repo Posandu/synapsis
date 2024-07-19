@@ -15,6 +15,7 @@
 	import Note from '$lib/ui/Note.svelte';
 	import BlankState from '$lib/ui/BlankState.svelte';
 	import autosize from 'svelte-autosize';
+	import { onMount, tick } from 'svelte';
 
 	const { data } = $props();
 
@@ -126,6 +127,8 @@
 			deleting = false;
 		}
 	};
+
+	onMount(() => tick().then(() => window.dispatchEvent(new Event('resize'))));
 </script>
 
 <div class="mb-8 w-full gap-4 align-baseline md:flex">

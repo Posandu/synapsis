@@ -81,9 +81,4 @@ const newQuizInitialStore = createNewQuizInitialItemsStore();
 const newFlashcardInitialStore = createNewFlashcardInitialItemsStore();
 const xpStore = createXPStore();
 
-export {
-	newNoteInitialCategoryStore,
-	newQuizInitialStore,
-	newFlashcardInitialStore,
-	xpStore
-};
+export { newNoteInitialCategoryStore, newQuizInitialStore, newFlashcardInitialStore, xpStore };

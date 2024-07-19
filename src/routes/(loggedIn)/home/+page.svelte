@@ -32,7 +32,7 @@
 	remember - so keep practicing!
 </Typography>
 
-<div class="grid md:grid-cols-3 gap-4">
+<div class="grid gap-4 md:grid-cols-3">
 	{#if data.practicedCount == 0 && data.nonPracticedCount == 0}
 		<BlankState desc="You haven't practiced any notes yet!" />
 	{:else}

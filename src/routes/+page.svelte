@@ -38,7 +38,8 @@
 		</h1>
 
 		<p class="mb-10 max-w-2xl text-xl text-gray-600 sm:text-2xl">
-			Synapsis helps you learn and retain information through interactive and engaging methods using AI.
+			Synapsis helps you learn and retain information through interactive and engaging methods using
+			AI.
 		</p>
 
 		<a

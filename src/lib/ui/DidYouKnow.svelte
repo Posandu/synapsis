@@ -27,9 +27,9 @@
 
 		alreadySaid = [...alreadySaid, shown];
 
-        if (alreadySaid.length === items.length) {
-            alreadySaid = [];
-        }
+		if (alreadySaid.length === items.length) {
+			alreadySaid = [];
+		}
 	};
 
 	onMount(() => {

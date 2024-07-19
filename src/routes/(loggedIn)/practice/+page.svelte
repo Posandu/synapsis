@@ -12,7 +12,7 @@
 	stick!
 </Typography>
 
-<div class="grid md:grid-cols-3 gap-4">
+<div class="grid gap-4 md:grid-cols-3">
 	<a
 		href="/practice/quizzes"
 		class="col-span-1 rounded-lg border border-purple-200 bg-purple-50 p-5 text-center shadow transition-all hover:shadow-lg"

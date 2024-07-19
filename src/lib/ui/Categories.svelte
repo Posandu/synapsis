@@ -26,7 +26,7 @@
 		selectedCategory = $bindable(null),
 		refreshFn = () => {},
 		hideHeader = false,
-		onSelect = (category: Category) => {},
+		onSelect = () => {},
 		onLoad = () => {},
 		removePadding = false
 	}: {

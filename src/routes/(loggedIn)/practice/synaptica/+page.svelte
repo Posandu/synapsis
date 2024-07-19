@@ -456,9 +456,9 @@
 					!chat.read && 'ring ring-primary/20'
 				)}"
 			>
-				<Typography variant="h4" class="font-medium {clsx(
-					!chat.read && 'text-primary'
-				)}">{chat.title}</Typography>
+				<Typography variant="h4" class="font-medium {clsx(!chat.read && 'text-primary')}"
+					>{chat.title}</Typography
+				>
 
 				<Typography variant="subtitle" class="mt-2">{chat.createdAt.toLocaleString()}</Typography>
 

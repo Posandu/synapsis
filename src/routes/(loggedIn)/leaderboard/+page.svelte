@@ -19,6 +19,8 @@
 			{/each}
 		</div>
 	{:else}
-		<BlankState desc="Looks like no one has earned any points today. This is your chance to be on the top of the leaderboard!" />
+		<BlankState
+			desc="Looks like no one has earned any points today. This is your chance to be on the top of the leaderboard!"
+		/>
 	{/if}
 </div>

@@ -23,6 +23,7 @@
 	import QuizItem from './QuizItem.svelte';
 	import FlashcardItem from './FlashcardItem.svelte';
 	import autosize from 'svelte-autosize';
+	import { onMount, tick } from 'svelte';
 
 	const carta = new Carta({
 		sanitizer: DOMPurify.sanitize
@@ -152,6 +153,8 @@
 			}
 		})();
 	});
+
+	onMount(() => tick().then(() => window.dispatchEvent(new Event('resize'))));
 </script>
 
 {#snippet SelectCategoryDialog()}
@@ -263,7 +266,7 @@
 				class="mb-3 h-max min-h-0 w-full resize-none flex-wrap text-3xl font-bold text-black"
 				placeholder="Title"
 				bind:value={$form.title}
-				rows="1"
+				rows={$form.title.split('\n').length}
 				use:autosize
 			></textarea>
 

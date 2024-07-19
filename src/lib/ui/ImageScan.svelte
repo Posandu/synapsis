@@ -126,11 +126,11 @@
 </script>
 
 <div
-	class="floating relative mx-auto w-max overflow-hidden rounded-box {!(
+	class="floating relative mx-auto w-full overflow-hidden rounded-box {!(
 		currentState == 'imageProcessing'
 	) && 'hidden'}"
 >
-	<canvas id="canvas" bind:this={canvas}></canvas>
+	<canvas id="canvas" bind:this={canvas} class="w-full"></canvas>
 
 	<div class="shimmer"></div>
 </div>

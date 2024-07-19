@@ -8,7 +8,7 @@ export const load = async ({ params, locals }) => {
 			userID: locals.user!.id
 		});
 
-		if(!data) return error(404, 'Category not found');
+		if (!data) return error(404, 'Category not found');
 
 		return {
 			...data

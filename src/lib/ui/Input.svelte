@@ -26,7 +26,7 @@
 	} = $props();
 </script>
 
-<label class="w-full block {className}">
+<label class="block w-full {className}">
 	<label class="input input-bordered flex items-center justify-center gap-2">
 		{#if before}
 			{@render before()}
