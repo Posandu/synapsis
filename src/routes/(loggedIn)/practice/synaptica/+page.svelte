@@ -184,8 +184,12 @@
 		inputElement?.focus();
 	};
 
-	onMount(() => {
-		scrollToBottom();
+	onMount(async () => {
+		await tick();
+
+		setTimeout(() => {
+			scrollToBottom();
+		}, 100);
 	});
 
 	$effect(() => {
