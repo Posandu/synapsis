@@ -67,9 +67,8 @@
 	<dialog id="my_modal_5" open class="modal modal-open modal-bottom sm:modal-middle">
 		<div class="modal-box">
 			<h3 class="text-lg font-bold">Hello!</h3>
-			<p class="py-4">Welcome to Synapsis! Want to take a quick tour?</p>
+			<p class="py-4">Welcome to Synapsis! Let's get you started with a quick tour.</p>
 			<div class="modal-action">
-				<button class="btn btn-ghost" onclick={() => {}}> No </button>
 				<button
 					class="btn btn-primary"
 					onclick={() => {
@@ -80,7 +79,7 @@
 						});
 					}}
 				>
-					Yes
+					Start Tour
 				</button>
 			</div>
 		</div>
