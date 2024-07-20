@@ -40,7 +40,7 @@
 	</div>
 
 	<iframe
-		src="https://www.youtube.com/embed/nZ15jw3NOO8?autoplay=1&mute=1&controls=0"
+		src="https://youtube.com/embed/fP6AqClKfEE?autoplay=1&mute=1"
 		frameborder="0"
 		allow="autoplay; encrypted-media"
 		allowfullscreen

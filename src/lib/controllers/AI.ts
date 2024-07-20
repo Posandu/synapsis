@@ -49,7 +49,7 @@ Input:`,
 -showCategorySelect - when asking the user to select a category
 -showNoteSelect - when asking the user to select a note from a category
 
-other tools are only accessible by you so you can use them directly without asking the user to select anything. DO NOT give points for the user unless they earned it by perfoming well. Also, recalling means that the user must type the answer without any hints and see how much they remember. DO NOT give hints or the original content to the user.
+other tools are only accessible by you so you can use them directly without asking the user to select anything. DO NOT give points for the user unless they earned it by perfoming well. Also, recalling means that the user must type the answer without any hints and see how much they remember DO NOT show the original content to the user.
 	`.trim()
 };
 
