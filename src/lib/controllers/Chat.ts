@@ -3,17 +3,20 @@ import prisma from '$lib/server/prisma';
 class Chat {
 	static async createChat({
 		userID,
-		data
+		data,
+		read
 	}: {
 		userID: string;
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		data: any;
+		read?: boolean;
 	}) {
 		return await prisma.chat.create({
 			data: {
 				data,
 				user: { connect: { id: userID } },
-				title: 'Untitled Chat'
+				title: 'Untitled Chat',
+				read: read || false
 			}
 		});
 	}

@@ -5,11 +5,15 @@
 	import { page } from '$app/stores';
 	import { DropdownMenu } from 'bits-ui';
 	import { scale } from 'svelte/transition';
-	import type { Snippet } from 'svelte';
-	import { xpStore } from '$lib/store.svelte';
+	import { onMount, tick, type Snippet } from 'svelte';
+	import { introStore, xpStore } from '$lib/store.svelte';
 	import { goto } from '$app/navigation';
 
-	let { children, unreadChatCount }: { children: Snippet; unreadChatCount: number } = $props();
+	let {
+		children,
+		unreadChatCount,
+		introGivenItems
+	}: { children: Snippet; unreadChatCount: number; introGivenItems: string[] } = $props();
 
 	const menuItems: {
 		name: string;
@@ -51,7 +55,37 @@
 
 		return destroy;
 	});
+
+	$effect(() => {
+		if (introGivenItems.length !== 0 && [...new Set(introGivenItems)].length !== 4) {
+			introStore.start();
+		}
+	});
 </script>
+
+{#if introGivenItems.length == 0 && !introStore.started}
+	<dialog id="my_modal_5" open class="modal modal-open modal-bottom sm:modal-middle">
+		<div class="modal-box">
+			<h3 class="text-lg font-bold">Hello!</h3>
+			<p class="py-4">Welcome to Synapsis! Want to take a quick tour?</p>
+			<div class="modal-action">
+				<button class="btn btn-ghost" onclick={() => {}}> No </button>
+				<button
+					class="btn btn-primary"
+					onclick={() => {
+						goto('/home').then(() => {
+							tick().then(() => {
+								introStore.start();
+							});
+						});
+					}}
+				>
+					Yes
+				</button>
+			</div>
+		</div>
+	</dialog>
+{/if}
 
 <div class="flex min-h-screen" data-sveltekit-preload-data="false">
 	<div

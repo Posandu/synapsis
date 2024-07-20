@@ -13,6 +13,7 @@ model User {
   password_hash     String
   createdAt         DateTime  @default(now())
   lastOverviewGiven DateTime?
+  introGivenItems   String[]
 
   sessions        Session[]
   notes           Note[]

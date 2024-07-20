@@ -1,6 +1,8 @@
 <script lang="ts">
 	import 'svelte-ripple-action/ripple.css';
 	import 'carta-md/default.css';
+	import 'intro.js/introjs.css';
+	import 'intro.js/themes/introjs-modern.css';
 	import { pwaInfo } from 'virtual:pwa-info';
 
 	import { xpStore } from '$lib/store.svelte';
@@ -20,6 +22,6 @@
 	{@html webManifestLink}
 </svelte:head>
 
-<AppShell unreadChatCount={data.unreadChatCount}>
+<AppShell unreadChatCount={data.unreadChatCount} introGivenItems={data.user.introGivenItems}>
 	{@render children()}
 </AppShell>

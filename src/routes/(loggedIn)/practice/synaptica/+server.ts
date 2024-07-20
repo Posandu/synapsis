@@ -119,7 +119,8 @@ export const POST = async ({ request, locals }) => {
 		if (action === 'startChat') {
 			const newChat = await Chat.createChat({
 				userID: locals.user!.id,
-				data: []
+				data: [],
+				read: true
 			});
 
 			return json({

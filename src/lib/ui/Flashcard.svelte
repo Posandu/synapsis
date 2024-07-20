@@ -169,6 +169,7 @@
 		transform-style: preserve-3d;
 		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 		border-radius: 20px;
+		backface-visibility: hidden;
 	}
 
 	.flashcard__inner.flipped {

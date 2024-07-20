@@ -7,12 +7,29 @@
 	import { fetcher, stringToColor } from '$lib/util';
 	import { Dialog } from 'bits-ui';
 	import { fade, scale } from 'svelte/transition';
+	import introJs from 'intro.js';
+	import { introStore } from '$lib/store.svelte.js';
+	import { onDestroy } from 'svelte';
 
 	let { data } = $props();
 
 	let viewCategoriesDialogOpen = $state(false);
 
 	let demoLoading = $state(false);
+
+	$effect(() => {
+		(async () => {
+			if (introStore.started && !introStore.isCompleted('/notes')) {
+				const instance = await introJs().start();
+
+				instance.onbeforeexit(async () => {
+					introStore.complete('/notes');
+
+					return true;
+				});
+			}
+		})();
+	});
 </script>
 
 <div class="w-full align-baseline md:flex">
@@ -24,7 +41,11 @@
 		</Typography>
 	</div>
 
-	<div class="flex items-baseline gap-2 align-baseline">
+	<div
+		class="flex items-baseline gap-2 align-baseline"
+		data-intro="Here you can manage your notes and categories."
+		data-step="1"
+	>
 		<Button
 			variant="primary"
 			onclick={() => {
@@ -74,45 +95,51 @@
 	</Dialog.Root>
 {/snippet}
 
-{#if data.categories.length == 0}
-	<BlankState>
-		<Button
-			variant="primary"
-			loading={demoLoading}
-			disabled={demoLoading}
-			onclick={() => {
-				demoLoading = true;
+<section
+	data-intro="You can see your categories here. Click on a category to view notes in that category."
+	data-step="2"
+	class:pointer-events-none={introStore.started && !introStore.isCompleted('/notes')}
+>
+	{#if data.categories.length == 0}
+		<BlankState>
+			<Button
+				variant="primary"
+				loading={demoLoading}
+				disabled={demoLoading}
+				onclick={() => {
+					demoLoading = true;
 
-				fetcher('/api/demo', {
-					method: 'POST'
-				}).then(() => {
-					demoLoading = false;
-					invalidate('notes:page');
-				});
-			}}>Create a few demo notes</Button
-		>
-	</BlankState>
-{:else}
-	<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
-		{#each data.categories as category}
-			{@const color = stringToColor(category.id)}
-
-			<a
-				class="item group relative rounded-lg border p-5 transition-all hover:bg-base-200 focus-visible:ring-4 active:bg-base-200 active:shadow"
-				href="/notes/category/{category.id}"
+					fetcher('/api/demo', {
+						method: 'POST'
+					}).then(() => {
+						demoLoading = false;
+						invalidate('notes:page');
+					});
+				}}>Create a few demo notes</Button
 			>
-				<Typography variant="h4" class="relative">{category.name}</Typography>
-				<Typography variant="subtitle" class="relative mt-4">
-					{category._count.notes} notes
-				</Typography>
+		</BlankState>
+	{:else}
+		<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+			{#each data.categories as category}
+				{@const color = stringToColor(category.id)}
 
-				<div
-					class="absolute right-5 top-5 size-4 rounded-full opacity-0 group-hover:opacity-60"
-					style="background-color: {color}"
-				></div>
-			</a>
-		{/each}
-	</div>
-{/if}
+				<a
+					class="item group relative rounded-lg border p-5 transition-all hover:bg-base-200 focus-visible:ring-4 active:bg-base-200 active:shadow"
+					href="/notes/category/{category.id}"
+				>
+					<Typography variant="h4" class="relative">{category.name}</Typography>
+					<Typography variant="subtitle" class="relative mt-4">
+						{category._count.notes} notes
+					</Typography>
+
+					<div
+						class="absolute right-5 top-5 size-4 rounded-full opacity-0 group-hover:opacity-60"
+						style="background-color: {color}"
+					></div>
+				</a>
+			{/each}
+		</div>
+	{/if}
+</section>
 
 {@render ViewCategoriesDialog()}

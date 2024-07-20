@@ -5,6 +5,7 @@
 	import { fetcher, goBack, screamToTheVoid, wait } from '$lib/util';
 	import clsx from 'clsx';
 	import {
+		introStore,
 		newFlashcardInitialStore,
 		newNoteInitialCategoryStore,
 		newQuizInitialStore
@@ -16,6 +17,7 @@
 	import BlankState from '$lib/ui/BlankState.svelte';
 	import autosize from 'svelte-autosize';
 	import { onMount, tick } from 'svelte';
+	import introJs from 'intro.js';
 
 	const { data } = $props();
 
@@ -129,6 +131,20 @@
 	};
 
 	onMount(() => tick().then(() => window.dispatchEvent(new Event('resize'))));
+
+	$effect(() => {
+		(async () => {
+			if (introStore.started && !introStore.isCompleted('/category')) {
+				const instance = await introJs().start();
+
+				instance.onbeforeexit(async () => {
+					introStore.complete('/category');
+
+					return true;
+				});
+			}
+		})();
+	});
 </script>
 
 <div class="mb-8 w-full gap-4 align-baseline md:flex">
@@ -147,6 +163,8 @@
 			class="flex-wrap text-4xl font-bold text-black"
 			rows="1"
 			use:autosize
+			data-intro="You can change the category name here."
+			data-step="1"
 		></textarea>
 
 		<Typography variant="subtitle" class="mt-3 max-w-xl">
@@ -156,6 +174,8 @@
 
 	<div
 		class="mt-8 flex flex-1 flex-row-reverse items-start gap-2 overflow-hidden md:mt-0 md:flex-row md:items-baseline"
+		data-intro="Here you can manage your category"
+		data-step="2"
 	>
 		<Button
 			variant={deleting ? 'primary' : 'ghost'}

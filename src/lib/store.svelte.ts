@@ -75,10 +75,48 @@ function createXPStore() {
 	};
 }
 
+function createIntroCompletedStore() {
+	let started = $state<boolean>(false);
+	let completed = $state<string[]>([]);
+
+	return {
+		get started() {
+			return started;
+		},
+		isCompleted(attr: string) {
+			return completed.includes(attr);
+		},
+		start() {
+			started = true;
+		},
+		complete(attr: string) {
+			completed = [...completed, attr];
+
+			fetch('/api/completeIntroStep', {
+				method: 'POST',
+				body: JSON.stringify({ id: attr }),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+		},
+		get completed() {
+			return completed;
+		}
+	};
+}
+
 const newNoteInitialCategoryStore = createNewNoteInitialCategoryStore();
 
 const newQuizInitialStore = createNewQuizInitialItemsStore();
 const newFlashcardInitialStore = createNewFlashcardInitialItemsStore();
 const xpStore = createXPStore();
+const introStore = createIntroCompletedStore();
 
-export { newNoteInitialCategoryStore, newQuizInitialStore, newFlashcardInitialStore, xpStore };
+export {
+	newNoteInitialCategoryStore,
+	newQuizInitialStore,
+	newFlashcardInitialStore,
+	xpStore,
+	introStore
+};

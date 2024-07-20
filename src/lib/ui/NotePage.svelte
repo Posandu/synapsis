@@ -16,6 +16,7 @@
 	import toast from 'svelte-french-toast';
 	import type { PageData } from '../../routes/(loggedIn)/notes/new/$types';
 	import {
+		introStore,
 		newFlashcardInitialStore,
 		newNoteInitialCategoryStore,
 		newQuizInitialStore
@@ -24,6 +25,7 @@
 	import FlashcardItem from './FlashcardItem.svelte';
 	import autosize from 'svelte-autosize';
 	import { onMount, tick } from 'svelte';
+	import introJs from 'intro.js';
 
 	const carta = new Carta({
 		sanitizer: DOMPurify.sanitize
@@ -155,6 +157,20 @@
 	});
 
 	onMount(() => tick().then(() => window.dispatchEvent(new Event('resize'))));
+
+	$effect(() => {
+		(async () => {
+			if (introStore.started && !introStore.isCompleted('/note')) {
+				const instance = await introJs().start();
+
+				instance.onbeforeexit(async () => {
+					introStore.complete('/note');
+
+					return true;
+				});
+			}
+		})();
+	});
 </script>
 
 {#snippet SelectCategoryDialog()}
@@ -250,7 +266,7 @@
 	</Dialog.Root>
 {/snippet}
 
-<form method="POST" use:enhance>
+<form method="POST" use:enhance data-intro="And.. that's it! You can explore more. Hope you enjoy Synapsis!" data-step="3">
 	<div class="mb-4 flex w-full gap-4 align-baseline">
 		<div class="flex items-baseline align-baseline">
 			<Button
@@ -268,6 +284,8 @@
 				bind:value={$form.title}
 				rows={$form.title.split('\n').length}
 				use:autosize
+				data-intro="You can change the note title here. It can be anything you like. Just make sure it's descriptive."
+				data-step="1"
 			></textarea>
 
 			{#if $errors.title}
@@ -297,7 +315,11 @@
 			/>
 		</div>
 
-		<div class="mt-8 w-60 md:mt-0">
+		<div
+			class="mt-8 w-60 md:mt-0"
+			data-intro="You can publish, scan a note, fix errors, select a category, and more here."
+			data-step="2"
+		>
 			<Typography variant="h5" class="mb-3">{initialValues ? 'Update' : 'Publish'}</Typography>
 
 			{#if !initialValues}

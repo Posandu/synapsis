@@ -235,7 +235,7 @@
 					});
 
 					if (resp.success) {
-						$activeChatID = resp.data;
+						window.location.href = `?c=${resp.data}`;
 					} else {
 						toast.error('Failed to start chat');
 					}
