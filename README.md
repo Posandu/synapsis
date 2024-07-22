@@ -1,38 +1,74 @@
-# create-svelte
+# Synapsis
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+View the web app [here](https://synapsis.posandu.com/).
 
-## Creating a project
+Synapsis is a web app designed to enhance note-taking and study efficiency through advanced AI features. This README provides an overview of the project, installation instructions, and usage guidelines.
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Table of Contents
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+1. [Introduction](#introduction)
+2. [Installation](#installation)
+3. [Usage](#usage)
+4. [Contributing](#contributing)
+5. [License](#license)
 
-# create a new project in my-app
-npm create svelte@latest my-app
+## Introduction
+
+Synapsis aims to revolutionize how users interact with their study materials by offering intelligent note organization, context-aware insights, and seamless integration with various educational tools. Built with cutting-edge technology, Synapsis is designed to make learning more efficient and effective.
+
+## Installation
+
+To get started with Synapsis, follow these steps:
+
+### Environment Setup
+
+Make sure to add these in an .env file:
+
+```yaml
+DATABASE_URL="" # Postgres database URL
+GOOGLE_AI_API_KEY="" # Google Gemini API key
+OPENAI_API_KEY="" # OpenAI API key
+INNGEST="" # Inngest API key
 ```
 
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+1. **Clone the repository**:
 
 ```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+git clone https://github.com/Posandu/synapsis.git
 ```
 
-## Building
-
-To create a production version of your app:
+2. **Navigate to the project directory**:
 
 ```bash
-npm run build
+cd synapsis
 ```
 
-You can preview the production build with `npm run preview`.
+3. **Install dependencies**:
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+```bash
+bun install
+```
+
+4. **Start the development server**:
+
+```bash
+bun run dev
+```
+
+5. **Open your browser** and go to `http://localhost:5173` to see the app in action.
+
+## Usage
+
+1. **Create an account** or **log in** to access your study materials.
+2. **Upload your notes** and **explore** the AI-powered features.
+
+## Contributing
+
+We welcome contributions to Synapsis! If you'd like to help improve the app, please follow these guidelines:
+
+1. **Fork the repository** and create a new branch for your changes.
+2. **Submit a pull request** with a detailed description of your modifications.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
